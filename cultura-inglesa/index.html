@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<title>Cultura Inglesa Salvador — Inglês que abre caminhos</title>
+<meta content="Recriação front-end de uma experiência digital para Cultura Inglesa Salvador, com cursos, unidades e navegação responsiva." name="description"/>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;700&amp;display=swap" rel="stylesheet"/>
+<link crossorigin="anonymous" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" rel="stylesheet"/>
+<link href="css/styles.css" rel="stylesheet"/>
+</head>
+<body>
+<a class="skip-link" href="#conteudo">Ir para o conteúdo</a>
+<!-- 01 • Header -->
+<header class="site-header" id="topo">
+<div class="topbar">
+<p>Cultura Inglesa Salvador</p>
+<ul aria-label="Redes sociais" class="social">
+<li><a aria-label="Facebook da Cultura Inglesa (abre em nova aba)" href="https://www.facebook.com/culturainglesasp" rel="noopener noreferrer" target="_blank"><img alt="" height="18" src="assets/icon-facebook.svg" width="18"/></a></li>
+<li><a aria-label="Instagram da Cultura Inglesa (abre em nova aba)" href="https://www.instagram.com/culturainglesaoficial/" rel="noopener noreferrer" target="_blank"><img alt="" height="18" src="assets/icon-instagram.svg" width="18"/></a></li>
+<li><a aria-label="X da Cultura Inglesa (abre em nova aba)" href="https://x.com/culturainglesa" rel="noopener noreferrer" target="_blank"><img alt="" height="18" src="assets/icon-x.svg" width="18"/></a></li>
+</ul>
+</div>
+<div class="mainbar">
+<nav aria-label="Principal" class="nav-desktop">
+<ul><li><a href="#cursos">Cursos</a></li><li><a href="#exames">Exames Internacionais</a></li><li><a href="#teste">Aluno</a></li><li><a href="#unidades">Unidades</a></li><li><a href="#lead">Contato</a></li></ul>
+</nav>
+<a class="btn btn-red btn-header" href="#lead">Fale Conosco</a>
+<a class="btn btn-red btn-header-m" href="#lead">Fale Conosco</a>
+<button aria-controls="menu-mobile" aria-expanded="false" aria-label="Abrir menu" class="menu-toggle" type="button"><span aria-hidden="true">☰</span></button>
+</div>
+<a aria-label="Cultura Inglesa — início" class="logo-plate" href="index.html">
+<img alt="" class="plate" src="assets/logo-plate.svg"/>
+<img alt="" class="mark" src="assets/logo-mark.png"/>
+</a>
+</header>
+<!-- Menu mobile aberto -->
+<div aria-label="Menu de navegação" aria-modal="true" class="menu-mobile" hidden="" id="menu-mobile" role="dialog">
+<div class="menu-head">
+<span class="menu-logo"><img alt="Cultura Inglesa" src="assets/menu-logo.png"/></span>
+<button aria-label="Fechar menu" class="menu-close" type="button"><span aria-hidden="true">×</span></button>
+</div>
+<div class="menu-body">
+<p class="menu-label">NAVEGAÇÃO</p>
+<ul class="menu-list"><li><a href="#cursos">Cursos</a></li><li><a href="#exames">Exames Internacionais</a></li><li><a href="#teste">Aluno</a></li><li><a href="#unidades">Unidades</a></li><li><a href="#lead">Contato</a></li></ul>
+<a class="menu-cta menu-cta-red" href="#lead">Fale Conosco</a>
+<button class="menu-cta menu-cta-outline" data-open-wa="" type="button"><img alt="" height="16" src="assets/whatsapp-mark-menu.svg" width="16"/>WhatsApp</button>
+<p class="menu-note">Atendimento rápido pelos canais de contato da Cultura Inglesa Salvador.</p>
+</div>
+</div>
+<main id="conteudo">
+<!-- 02 • Hero -->
+<section aria-labelledby="hero-title" class="hero">
+<div class="hero-copy">
+<p class="eyebrow">INGLÊS QUE ABRE CAMINHOS</p>
+<h1 id="hero-title">Faz toda a diferença<br/>no currículo!</h1>
+<p class="hero-sub">Tradição no ensino de inglês em Salvador.</p>
+<a class="btn btn-red btn-hero" href="#lead">Agende uma aula experimental grátis</a>
+<a class="hero-helper" href="#teste">Sem compromisso • Faça o teste de nivelamento grátis ›</a>
+</div>
+<div class="hero-media">
+<picture>
+<source media="(max-width: 767px)" srcset="assets/m-hero-portrait.png"/>
+<img alt="" src="assets/hero-portrait.png"/>
+</picture>
+</div>
+</section>
+<!-- 03 • Nossos Cursos -->
+<section aria-labelledby="cursos-title" class="cursos" id="cursos">
+<h2 id="cursos-title">Nossos Cursos</h2>
+<p class="section-intro">Escolha o momento certo para começar.</p>
+<ul class="curso-list">
+<li class="curso-card">
+<span class="marker"><img alt="" src="assets/course-marker.svg"/><span>01</span></span>
+<h3>Crianças</h3>
+<p class="curso-desc">Aprender inglês com brincadeiras, arte, ciência e criatividade.</p>
+<p class="curso-meta">De 4 a 9 anos (até 10 em algumas turmas)<br/>Aprendizado lúdico e natural<br/>Formato comum: 2 aulas de cerca de 60 min/semana</p>
+<a class="btn btn-navy btn-curso" href="#lead"><span>Conheça a turma</span><span aria-hidden="true" class="course-chevron">»</span></a>
+</li>
+<li class="curso-card">
+<span class="marker"><img alt="" src="assets/course-marker.svg"/><span>02</span></span>
+<h3>Jovens</h3>
+<p class="curso-desc">Projetos práticos, pensamento crítico e conversação dinâmica.</p>
+<p class="curso-meta">De 10 a 17 anos<br/>Inglês para estudos e intercâmbio<br/>Preparação para exames Cambridge</p>
+<a class="btn btn-navy btn-curso" href="#lead"><span>Comece agora</span><span aria-hidden="true" class="course-chevron">»</span></a>
+</li>
+<li class="curso-card">
+<span class="marker"><img alt="" src="assets/course-marker.svg"/><span>03</span></span>
+<h3>Adultos</h3>
+<p class="curso-desc">Inglês prático para carreira, liderança, viagens e projetos pessoais.</p>
+<p class="curso-meta">A partir de 18 anos<br/>Do elementar à proficiência<br/>Turmas regulares ou intensivas</p>
+<a class="btn btn-navy btn-curso" href="#lead"><span>Comece agora</span><span aria-hidden="true" class="course-chevron">»</span></a>
+</li>
+</ul>
+</section>
+<!-- 04 • Prova social -->
+<section aria-labelledby="prova-title" class="prova" id="prova">
+<div class="prova-head">
+<h2 id="prova-title">Quem aprende com a Cultura,<br class="only-m"/> leva isso adiante</h2>
+
+</div>
+<ul class="depoimentos" aria-label="Exemplos de depoimentos fictícios para demonstração da interface">
+<li class="depoimento">
+<div class="pessoa"><img alt="" height="48" src="assets/avatar-marina.png" width="48"/><p><strong>Marina Azevedo<br/>Estudante universitária</strong></p></div>
+<p class="quote">As atividades práticas deixaram as aulas mais leves. Ganhei confiança para conversar em inglês sem medo de errar.</p>
+</li>
+<li class="depoimento">
+<div class="pessoa"><img alt="" height="48" src="assets/avatar-rafael.png" width="48"/><p><strong>Rafael Matos<br/>Profissional de tecnologia</strong></p></div>
+<p class="quote">Queria usar inglês com mais segurança no trabalho. Hoje consigo participar das conversas e me expressar melhor.</p>
+</li>
+<li class="depoimento">
+<div class="pessoa"><img alt="" height="48" src="assets/avatar-clara.png" width="48"/><p><strong>Clara Ribeiro<br/>Estudante do ensino médio</strong></p></div>
+<p class="quote">Gostei dos projetos e da troca com a turma. Aprender virou parte da minha rotina e me motivou a estudar fora.</p>
+</li>
+</ul>
+<p class="metrics-label only-m">Dados da rede Cultura Inglesa no Brasil</p>
+<ul aria-label="Indicadores da rede Cultura Inglesa no Brasil" class="metricas">
+<li class="metrica navy"><strong>+90 anos</strong><span>de história • rede Cultura Inglesa no Brasil</span></li>
+<li class="metrica red"><strong>+1,5 milhão</strong><span>de alunos formados • rede nacional</span></li>
+<li class="metrica navy"><strong>9,4 pontos</strong><span>avaliação dos professores pelos alunos</span></li>
+</ul>
+<div class="selos" id="exames">
+<h3>Exames internacionais e preparação</h3>
+<ul aria-label="Exames internacionais">
+<li><a class="exam-label" href="#lead" aria-label="Solicitar informações sobre exames Cambridge">Cambridge • exames</a></li>
+<li><a class="exam-label" href="#lead" aria-label="Solicitar informações sobre exames IELTS">IELTS • exames</a></li>
+<li><a class="exam-label" href="#lead" aria-label="Solicitar informações sobre o preparatório TOEFL">TOEFL • preparatório</a></li>
+</ul>
+</div>
+</section>
+<!-- 05 • Captação de Lead -->
+<section aria-labelledby="lead-title" class="lead" id="lead">
+<h2 id="lead-title">Quer descobrir a melhor turma para você?</h2>
+<p class="lead-copy">Deixe seu contato. A equipe fala com você e orienta o próximo passo.</p>
+<form class="lead-form" id="lead-form" novalidate="">
+<div aria-labelledby="q-label" class="qualifier" role="group">
+<span class="q-label" id="q-label">PARA QUEM É O CURSO?</span>
+<label class="pill"><input name="para-quem" type="radio" value="mim"/><span>Para mim</span></label>
+<label class="pill"><input name="para-quem" type="radio" value="filho"/><span>Para meu filho</span></label>
+</div>
+<div class="field-wrap f-nome">
+<label class="field">
+<span class="sr-only">Nome completo</span>
+<input aria-describedby="err-nome" autocomplete="name" name="nome" placeholder="Nome completo" required="" type="text"/>
+</label>
+<p aria-live="polite" class="field-error" id="err-nome"></p>
+</div>
+<div class="field-wrap f-whats">
+<label class="field">
+<span class="sr-only">WhatsApp com DDD</span>
+<input aria-describedby="err-whats" autocomplete="tel-national" inputmode="tel" name="whatsapp" placeholder="(71) 99999-9999" required="" type="tel"/>
+</label>
+<p aria-live="polite" class="field-error" id="err-whats"></p>
+</div>
+<div class="field-wrap f-unidade">
+<label class="field field-select">
+<span class="sr-only">Unidade de interesse</span>
+<select aria-describedby="err-unidade" name="unidade" required="">
+<option selected="" value="">Selecione a unidade</option>
+<option value="pituba">Pituba</option>
+<option value="ondina">Ondina</option>
+<option value="graca">Graça</option>
+<option value="vilas">Vilas</option>
+</select>
+<span aria-hidden="true" class="chev">▾</span>
+</label>
+<p aria-live="polite" class="field-error" id="err-unidade"></p>
+</div>
+<button class="btn btn-navy-sq f-submit" type="submit">Quero saber mais</button>
+<div class="consent-wrap">
+<label class="consent">
+<input aria-describedby="err-consent" id="consent-contact" name="autorizacao" required="" type="checkbox"/>
+<span>Autorizo que a equipe entre em contato comigo sobre cursos e matrículas.</span>
+</label>
+<p aria-live="polite" class="consent-error" id="err-consent"></p>
+</div>
+</form>
+</section>
+<!-- 06 • Teste de Nivelamento -->
+<section aria-labelledby="teste-title" class="teste" id="teste">
+<picture>
+<source media="(max-width: 767px)" srcset="assets/m-placement.png"/>
+<img alt="" class="bg" src="assets/placement.png"/>
+</picture>
+<div class="teste-panel">
+<h2 id="teste-title">TESTE DE<br/>NIVELAMENTO</h2>
+<p>Teste seus conhecimentos<br/>na língua inglesa.</p>
+<a aria-label="Solicitar informações sobre o teste de nivelamento" class="btn-teste" href="#lead">Fale com a equipe  ›</a>
+</div>
+</section>
+<!-- 07 • Novidades -->
+<section aria-labelledby="nov-title" class="novidades" id="novidades">
+<picture>
+<source media="(max-width: 767px)" srcset="assets/m-novidades.png"/>
+<img alt="" class="bg" src="assets/novidades.png"/>
+</picture>
+<div class="overlay"></div>
+<div class="nov-content">
+<h2 id="nov-title">NOVIDADES</h2>
+<p>Fique por dentro do que acontece na<br/>Cultura Inglesa Salvador!</p>
+<a class="btn-outline-white" href="#newsletter">Receber novidades  ›</a>
+</div>
+</section>
+<!-- 08 • Onde Estamos -->
+<section aria-labelledby="onde-title" class="onde" id="unidades">
+<div class="onde-intro">
+<h2 id="onde-title">Onde Estamos</h2>
+<p class="section-intro">Escolha a unidade mais próxima e fale diretamente com a equipe.</p>
+</div>
+<div class="mapa">
+<div aria-label="Mapa interativo das quatro unidades. Arraste para navegar, use os botões para ampliar e os marcadores para ver os endereços." class="mapa-viewport" id="mapa-leaflet" role="region"></div>
+<div class="mapa-fallback" hidden="">
+<img alt="Mapa de referência das unidades da Cultura Inglesa Salvador" src="assets/map.png"/>
+<p>O mapa interativo está indisponível neste momento.</p>
+</div>
+<span class="mapa-label">Mapa interativo • arraste para explorar</span>
+<div aria-label="Zoom do mapa" class="mapa-controls" role="group">
+<button aria-label="Ampliar mapa" data-zoom="in" type="button">+</button>
+<button aria-label="Reduzir mapa" data-zoom="out" type="button">−</button>
+<button aria-label="Restaurar mapa" data-zoom="reset" type="button">↺</button>
+</div>
+</div>
+<div class="contatos">
+<h3>Fale com a unidade</h3>
+<ul class="unidades">
+<li class="unidade" id="unidade-pituba" tabindex="-1">
+<h4>Pituba</h4>
+<p>Rua Nossa Sra. da Glória, 481 • 3535-0255</p>
+<div class="acoes">
+<a class="btn-wa" data-unit-info="pituba" href="#unidade-pituba"><img alt="" height="16" src="assets/whatsapp.svg" width="16"/>WhatsApp<span class="sr-only"> Pituba</span></a>
+<a class="btn-tel" href="tel:+557135350255"><img alt="" height="16" src="assets/phone.svg" width="16"/>Ligar 3535-0255</a>
+</div>
+</li>
+<li class="unidade" id="unidade-ondina" tabindex="-1">
+<h4>Ondina</h4>
+<p>Av. Oceânica, 5.949, 601 • 3339-1155</p>
+<div class="acoes">
+<a class="btn-wa" data-unit-info="ondina" href="#unidade-ondina"><img alt="" height="16" src="assets/whatsapp.svg" width="16"/>WhatsApp<span class="sr-only"> Ondina</span></a>
+<a class="btn-tel" href="tel:+557133391155"><img alt="" height="16" src="assets/phone.svg" width="16"/>Ligar 3339-1155</a>
+</div>
+</li>
+<li class="unidade" id="unidade-graca" tabindex="-1">
+<h4>Graça</h4>
+<p>Rua Plínio de Azevedo, 260 • 3035-1155</p>
+<div class="acoes">
+<a class="btn-wa" data-unit-info="graca" href="#unidade-graca"><img alt="" height="16" src="assets/whatsapp.svg" width="16"/>WhatsApp<span class="sr-only"> Graça</span></a>
+<a class="btn-tel" href="tel:+557130351155"><img alt="" height="16" src="assets/phone.svg" width="16"/>Ligar 3035-1155</a>
+</div>
+</li>
+<li class="unidade" id="unidade-vilas" tabindex="-1">
+<h4>Vilas</h4>
+<p>Praia de Stela, S/N • 2105-0002</p>
+<div class="acoes">
+<a class="btn-wa" data-unit-info="vilas" href="#unidade-vilas"><img alt="" height="16" src="assets/whatsapp.svg" width="16"/>WhatsApp<span class="sr-only"> Vilas</span></a>
+<a class="btn-tel" href="tel:+557121050002"><img alt="" height="16" src="assets/phone.svg" width="16"/>Ligar 2105-0002</a>
+</div>
+</li>
+</ul>
+<p aria-live="polite" class="unit-status" hidden="" id="unit-status" role="status"></p>
+</div>
+</section>
+<!-- 09 • Newsletter -->
+<section aria-labelledby="news-title" class="newsletter" id="newsletter">
+<h2 id="news-title">Newsletter</h2>
+<p class="news-copy">Receba novidades, eventos, promoções e conteúdos da Cultura Inglesa.<br/>Para atendimento ou matrícula, use Fale Conosco ou WhatsApp.</p>
+<form class="news-form" id="news-form" novalidate="">
+<div class="news-field">
+<label class="field news-email">
+<span class="sr-only">E-mail</span>
+<input aria-describedby="err-email" autocomplete="email" name="email" placeholder="voce@email.com" required="" type="email"/>
+</label>
+<p aria-live="polite" class="field-error" id="err-email"></p>
+</div>
+<button class="btn-news" type="submit">Receber novidades</button>
+</form>
+</section>
+</main>
+<!-- 10 • Footer -->
+<footer class="site-footer">
+<div class="footer-top">
+<img alt="Cultura Inglesa" class="footer-logo" src="assets/logo-mark.png"/>
+<div class="footer-info">
+<p class="f-title">Cultura Inglesa Salvador</p>
+<ul class="f-addr-d">
+<li>Pituba | Rua Nossa Sra. da Glória, 481. Tel: 3535.0255</li>
+<li>Ondina | Av. Oceânica, 5.949, 601. Tel: 3339.1155</li>
+<li>Graça | Rua Plínio de Azevedo, 260. Tel: 3035.1155</li>
+<li>Vilas | Praia de Stela, S/N. Tel: 2105.0002</li>
+</ul>
+<p class="f-addr-m">Pituba • 3535-0255   Ondina • 3339-1155<br/>Graça • 3035-1155   Vilas • 2105-0002</p>
+</div>
+<div aria-hidden="true" class="f-sep"></div>
+<form class="dict" id="dict-form">
+<p class="f-title" id="dict-title">Dicionários</p>
+<label class="sr-only" for="dict-word">Palavra a consultar</label>
+<input aria-describedby="dict-title" autocomplete="off" class="dict-input" id="dict-word" placeholder="sua palavra" type="text"/>
+<fieldset class="dict-src">
+<legend class="sr-only">Dicionário</legend>
+<label><input checked="" name="dict" type="radio" value="cambridge"/>Cambridge</label>
+<label><input name="dict" type="radio" value="oxford"/>Oxford</label>
+<label><input name="dict" type="radio" value="longman"/>Longman</label>
+</fieldset>
+<button class="dict-btn" type="submit">Consultar  ›</button>
+</form>
+<ul aria-label="Redes sociais" class="social footer-social">
+<li><a aria-label="Facebook da Cultura Inglesa (abre em nova aba)" href="https://www.facebook.com/culturainglesasp" rel="noopener noreferrer" target="_blank"><img alt="" height="22" src="assets/footer-facebook.svg" width="22"/></a></li>
+<li><a aria-label="Instagram da Cultura Inglesa (abre em nova aba)" href="https://www.instagram.com/culturainglesaoficial/" rel="noopener noreferrer" target="_blank"><img alt="" height="22" src="assets/footer-instagram.svg" width="22"/></a></li>
+<li><a aria-label="X da Cultura Inglesa (abre em nova aba)" href="https://x.com/culturainglesa" rel="noopener noreferrer" target="_blank"><img alt="" height="22" src="assets/footer-x.svg" width="22"/></a></li>
+</ul>
+</div>
+<p class="f-legal">Cultura Inglesa Salvador • canais institucionais e atendimento</p>
+<div class="footer-bottom">
+<nav aria-label="Rodapé">
+<ul class="f-nav"><li><a href="#cursos">Cursos</a></li><li><a href="#exames">Exames</a></li><li><a href="#teste">Aluno</a></li><li><a href="#unidades">Unidades</a></li><li><a href="#lead">Contato</a></li></ul>
+</nav>
+<a class="f-cta" href="#lead">Precisa de atendimento?  Fale Conosco</a>
+<a aria-label="Voltar ao topo" class="back-top" href="#topo"><img alt="" height="46" src="assets/back-to-top-circle.svg" width="46"/><img alt="" class="arrow" height="20" src="assets/back-to-top-arrow.svg" width="20"/></a>
+</div>
+</footer>
+<aside aria-labelledby="wa-picker-title" class="wa-picker" hidden="" id="wa-picker">
+<div class="wa-picker-head">
+<div><h2 id="wa-picker-title">Atendimento por WhatsApp</h2><p>Escolha a unidade para continuar</p></div>
+<button aria-label="Fechar opções do WhatsApp" class="wa-picker-close" type="button">×</button>
+</div>
+<div class="wa-picker-choices">
+<button data-unit="pituba" type="button"><span aria-hidden="true" class="unit-dot"></span>Pituba<span aria-hidden="true" class="choice-arrow">›</span></button>
+<button data-unit="graca" type="button"><span aria-hidden="true" class="unit-dot"></span>Graça<span aria-hidden="true" class="choice-arrow">›</span></button>
+<button data-unit="ondina" type="button"><span aria-hidden="true" class="unit-dot"></span>Ondina<span aria-hidden="true" class="choice-arrow">›</span></button>
+</div>
+</aside>
+<button aria-controls="wa-picker" aria-expanded="false" aria-label="Escolher unidade para atendimento pelo WhatsApp" class="wa-float" type="button"><img alt="" height="28" src="assets/whatsapp-lg.svg" width="28"/></button>
+<!-- Estado: lead enviado -->
+<dialog aria-labelledby="dlg-lead-title" class="state-dialog" id="dlg-lead">
+<p class="eyebrow-w">PRÉVIA DO FORMULÁRIO</p>
+<h2 id="dlg-lead-title">Dados validados!</h2>
+<p class="state-copy">Este formulário demonstra a experiência de preenchimento. Nenhuma informação foi enviada à escola.</p>
+<span aria-hidden="true" class="check">✓</span>
+<button class="state-wa" data-open-wa="" type="button"><img alt="" height="18" src="assets/whatsapp-state.svg" width="18"/>Escolher uma unidade</button>
+<button class="state-close" data-close="" type="button">Continuar navegando</button>
+</dialog>
+<!-- Estado: newsletter inscrita -->
+<dialog aria-labelledby="dlg-news-title" class="state-dialog state-news" id="dlg-news">
+<p class="eyebrow-w">NEWSLETTER</p>
+<h2 id="dlg-news-title">E-mail validado!</h2>
+<p class="state-copy">Esta é uma demonstração de interface: nenhuma inscrição foi enviada ou armazenada.</p>
+<a class="state-home" data-close="" href="#topo">Voltar para a Home</a>
+</dialog>
+<script crossorigin="anonymous" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="js/map-config.js"></script>
+<script src="js/main.js"></script>
+</body>
+</html>
