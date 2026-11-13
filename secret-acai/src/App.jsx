@@ -73,23 +73,19 @@ function SalesChart({ period }) {
   );
 }
 
-function DetailPanel({ title, id, children, hasLink = true }) {
-  const [expanded, setExpanded] = useState(false);
+function DetailPanel({ title, id, children, onViewAll }) {
   return (
     <section className="panel detail-panel" aria-labelledby={id}>
       <div className="panel-header">
         <h2 id={id}>{title}</h2>
-        {hasLink && <button type="button" className="text-button" onClick={() => setExpanded((v) => !v)} aria-expanded={expanded}>
-          {expanded ? "Mostrar menos" : "Ver todos"}
-        </button>}
+        {onViewAll && <button type="button" className="text-button" onClick={onViewAll}>Ver todos</button>}
       </div>
       <div className="detail-panel-body">{children}</div>
-      {expanded && <p className="panel-note">Estes são os registros demonstrativos disponíveis nesta versão do dashboard.</p>}
     </section>
   );
 }
 
-function Dashboard({ period, onPeriodChange, onSaleClick, onMenuClick }) {
+function Dashboard({ period, onPeriodChange, onSaleClick, onMenuClick, onNavigate }) {
   return (
     <main id="conteudo" className="main-content">
       <header className="topbar">
@@ -105,7 +101,7 @@ function Dashboard({ period, onPeriodChange, onSaleClick, onMenuClick }) {
       <div className="metrics-grid" aria-label="Indicadores da operação">{metrics.map((metric) => <SummaryCard key={metric.label} metric={metric} />)}</div>
       <div className="insights-grid">
         <SalesChart period={period} />
-        <DetailPanel title="Clientes sem compra recente" id="inactive-clients">
+        <DetailPanel title="Clientes sem compra recente" id="inactive-clients" onViewAll={() => onNavigate("Clientes")}>
           <ol className="clients-list">{recentClients.map(({ name, days }, index) => <li key={name}><span className="rank">{index + 1}</span><strong>{name}</strong><span className="days">{days} dias</span></li>)}</ol>
         </DetailPanel>
         <section className="panel leads-panel" aria-labelledby="leads-title">
@@ -113,7 +109,7 @@ function Dashboard({ period, onPeriodChange, onSaleClick, onMenuClick }) {
           <div className="lead-stats">{[{ count: 18, label: "Contatado" }, { count: 9, label: "Negociando" }, { count: 6, label: "Convertido" }].map(({ count, label }) => <div className="lead-stat" key={label}><strong>{count}</strong><span>{label}</span></div>)}</div>
           <p>6 leads avançaram de etapa nos últimos 7 dias</p>
         </section>
-        <DetailPanel title="Baixo estoque" id="low-stock"><ul className="stock-list">{lowStock.map(({ name, quantity }) => <li key={name}><strong>{name}</strong><span>{quantity}</span></li>)}</ul></DetailPanel>
+        <DetailPanel title="Baixo estoque" id="low-stock" onViewAll={() => onNavigate("Estoque")}><ul className="stock-list">{lowStock.map(({ name, quantity }) => <li key={name}><strong>{name}</strong><span>{quantity}</span></li>)}</ul></DetailPanel>
       </div>
     </main>
   );
@@ -129,7 +125,7 @@ export default function App() {
       <a href="#conteudo" className="skip-link">Pular para o conteúdo</a>
       <Sidebar active={active} onNavigate={setActive} mobileOpen={mobileOpen} onClose={() => setMobileOpen(false)} />
       {active === "Dashboard" ? (
-        <Dashboard period={period} onPeriodChange={setPeriod} onSaleClick={() => setActive("Vendas")} onMenuClick={() => setMobileOpen(true)} />
+        <Dashboard period={period} onPeriodChange={setPeriod} onSaleClick={() => setActive("Vendas")} onMenuClick={() => setMobileOpen(true)} onNavigate={setActive} />
       ) : (
         <Modules active={active} onMenuClick={() => setMobileOpen(true)} onNavigate={setActive} />
       )}
