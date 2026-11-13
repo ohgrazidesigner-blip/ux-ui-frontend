@@ -1,4 +1,5 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
+import Modules from "./Modules.jsx";
 
 const navigation = ["Dashboard", "Vendas", "Estoque", "Clientes", "Prospecção", "Relatórios"];
 
@@ -118,39 +119,20 @@ function Dashboard({ period, onPeriodChange, onSaleClick, onMenuClick }) {
   );
 }
 
-function SaleNotice({ onClose }) {
-  const ref = useRef(null);
-  useEffect(() => { ref.current?.focus(); const onKey = (e) => { if (e.key === "Escape") onClose(); }; document.addEventListener("keydown", onKey); return () => document.removeEventListener("keydown", onKey); }, [onClose]);
-  return (
-    <div className="dialog-backdrop" onMouseDown={(e) => { if (e.target === e.currentTarget) onClose(); }}>
-      <section className="dialog" role="dialog" aria-modal="true" aria-labelledby="dialog-title" tabIndex={-1} ref={ref}>
-        <h2 id="dialog-title">Fluxo de registro de venda</h2>
-        <p>Esta primeira etapa implementa o dashboard. O formulário de venda será desenvolvido a partir da tela específica do Figma, sem simular gravações no banco de dados.</p>
-        <div className="dialog-actions"><a href="https://www.figma.com/design/OmJYOxXm1vFodkfZBXwDd3?node-id=3-2" target="_blank" rel="noopener noreferrer">Ver tela no Figma</a><button type="button" onClick={onClose} className="primary-button">Fechar</button></div>
-      </section>
-    </div>
-  );
-}
-
 export default function App() {
   const [active, setActive] = useState("Dashboard");
   const [period, setPeriod] = useState(30);
   const [mobileOpen, setMobileOpen] = useState(false);
-  const [saleOpen, setSaleOpen] = useState(false);
   useEffect(() => { const onKey = (event) => { if (event.key === "Escape") setMobileOpen(false); }; window.addEventListener("keydown", onKey); return () => window.removeEventListener("keydown", onKey); }, []);
   return (
     <div className="app-shell">
       <a href="#conteudo" className="skip-link">Pular para o conteúdo</a>
       <Sidebar active={active} onNavigate={setActive} mobileOpen={mobileOpen} onClose={() => setMobileOpen(false)} />
       {active === "Dashboard" ? (
-        <Dashboard period={period} onPeriodChange={setPeriod} onSaleClick={() => setSaleOpen(true)} onMenuClick={() => setMobileOpen(true)} />
+        <Dashboard period={period} onPeriodChange={setPeriod} onSaleClick={() => setActive("Vendas")} onMenuClick={() => setMobileOpen(true)} />
       ) : (
-        <main id="conteudo" className="main-content">
-          <header className="topbar"><div className="title-block"><button type="button" className="mobile-menu-button" onClick={() => setMobileOpen(true)} aria-controls="main-menu">Menu</button><h1>{active}</h1></div></header>
-          <section className="panel module-notice"><h2>Implementação em andamento</h2><p>Este módulo será desenvolvido a partir das telas e dos fluxos correspondentes no Figma do Secret Açaí.</p><button type="button" className="primary-button" onClick={() => setActive("Dashboard")}>Voltar ao Dashboard</button></section>
-        </main>
+        <Modules active={active} onMenuClick={() => setMobileOpen(true)} onNavigate={setActive} />
       )}
-      {saleOpen && <SaleNotice onClose={() => setSaleOpen(false)} />}
     </div>
   );
 }
