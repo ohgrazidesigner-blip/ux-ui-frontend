@@ -346,7 +346,17 @@ export default function Modules({ active, onMenuClick, onNavigate }) {
       saleConfirm:"Revise os dados antes de baixar o estoque e registrar o pedido.",
       followUp:"Registre o próximo passo comercial nesta demonstração."
     }[modal]} onClose={close}>
-      {modal==="clientNew" && <form onSubmit={handleClientForm} className="m-modal-form"><Field label="Nome / negócio" required><input required className="m-control" name="name" placeholder="Nome do estabelecimento" /></Field><Field label="Telefone"><input className="m-control" name="phone" type="tel" placeholder="(71) 99999-9999" /></Field><Field label="Entrega"><select className="m-control" name="delivery"><option>Uber</option><option>Retirada</option></select></Field><div className="m-modal-actions"><button type="button" onClick={close} className="m-outline-button">Cancelar</button><button className="primary-button">Cadastrar cliente</button></div></form>}
+      {modal==="clientNew" && <form onSubmit={handleClientForm} className="m-modal-form">
+        <Field label="Nome do negócio" required><input required className="m-control" name="name" placeholder="Ex: Açaí da Praça" /></Field>
+        <Field label="Responsável"><input className="m-control" name="person" placeholder="Ex: Marina Souza" /></Field>
+        <Field label="WhatsApp" required><input required className="m-control" name="phone" type="tel" placeholder="(71) 99999-9999" /></Field>
+        <Field label="CPF / CNPJ"><input className="m-control" name="document" placeholder="Opcional" /></Field>
+        <Field label="Endereço"><input className="m-control" name="address" placeholder="Rua, número, bairro e referência" /></Field>
+        <div className="m-fields-row m-fields-two"><Field label="Entrega preferida"><select className="m-control" name="delivery"><option value="Uber">Uber</option><option value="Retirada">Retirada</option></select></Field><Field label="Cidade / bairro"><input className="m-control" name="city" placeholder="Salvador · BA" /></Field></div>
+        <Field label="Observações comerciais"><textarea className="m-control" name="note" rows="3" placeholder="Ex: prefere pedidos às quintas; negociar volume acima de 10 caixas" /></Field>
+        <p className="m-muted">Evite registrar informações pessoais sem necessidade operacional. Nesta demonstração, somente o nome e a entrega são salvos no navegador.</p>
+        <div className="m-impact"><strong>Dados visíveis conforme perfil de acesso</strong><span>Funcionários operacionais recebem somente os campos necessários para atender e vender. As permissões reais ainda não estão conectadas.</span></div>
+        <div className="m-modal-actions"><button type="button" onClick={close} className="m-outline-button">Cancelar</button><button className="primary-button">Salvar cliente</button></div></form>}
       {(modal==="stockEntry" || modal==="stockAdjust") && <form onSubmit={handleStockForm} className="m-modal-form">
         <div className="m-fields-row m-fields-two"><Field label="Tamanho" required><select name="size" className="m-control"><option>10L</option><option>5L</option></select></Field><Field label="Sabor" required><select name="flavor" className="m-control">{flavors.map(f=><option key={f}>{f}</option>)}</select></Field></div>
         <Field label={modal==="stockEntry"?"Quantidade de entrada":"Novo saldo total"} required><input className="m-control" name="quantity" type="number" min={modal==="stockEntry"?"1":"0"} step="1" defaultValue={modal==="stockEntry"?"20":"32"} required /></Field>
@@ -354,11 +364,18 @@ export default function Modules({ active, onMenuClick, onNavigate }) {
         <div className="m-modal-actions"><button type="button" className="m-outline-button" onClick={close}>Cancelar</button><button className="primary-button">Salvar movimentação</button></div>
       </form>}
       {modal==="leadNew" && <form onSubmit={handleLeadForm} className="m-modal-form">
-        <Field label="Empresa / negócio" required><input name="name" className="m-control" placeholder="Ex: Bowl da Vila" required /></Field><Field label="Contato"><input name="person" className="m-control" placeholder="Nome da pessoa de contato" /></Field>
-        <Field label="Origem"><select name="source" className="m-control">{srcOptions.map(s=><option key={s}>{s}</option>)}</select></Field>
-        <Field label="Observações"><textarea name="note" className="m-control" rows="3" placeholder="Próxima ação ou interesse do lead" /></Field>
-        <div className="m-modal-actions"><button type="button" className="m-outline-button" onClick={close}>Cancelar</button><button className="primary-button">Cadastrar lead</button></div>
-      </form>}
+        <Field label="Empresa / negócio" required><input name="name" className="m-control" placeholder="Ex: Bowl da Vila" required /></Field>
+        <Field label="Pessoa de contato"><input name="person" className="m-control" placeholder="Ex: João Lima" /></Field>
+        <Field label="WhatsApp"><input name="phone" className="m-control" type="tel" placeholder="(71) 99999-9999" /></Field>
+        <div className="m-fields-row m-fields-two"><Field label="Origem" required><select name="source" className="m-control" required>{srcOptions.map(src=><option key={src}>{src}</option>)}</select></Field><Field label="Etapa inicial"><input className="m-control" readOnly value="Contatado" /></Field></div>
+        <Field label="Cidade / bairro"><input className="m-control" name="city" placeholder="Salvador · BA" /></Field>
+        <Field label="Notas"><textarea name="note" className="m-control" rows="3" placeholder="Ex: vende açaí e sorvetes; hoje compra de outro fornecedor" /></Field>
+        <Field label="Próxima ação"><input name="next" className="m-control" placeholder="Enviar catálogo" /></Field>
+        <Field label="Data do follow-up"><input name="followUp" className="m-control" type="date" defaultValue="2026-08-22" /></Field>
+        <div className="m-impact"><strong>Conversão sem retrabalho</strong><span>Ao converter o lead, os dados principais poderão originar o cadastro de cliente. O vínculo com um banco de dados ainda não está implementado.</span></div>
+        <p className="m-muted">Dados de contato não são transmitidos a servidores. Este protótipo salva apenas empresa, pessoa de contato, notas, origem e etapa no navegador.</p>
+        <div className="m-modal-actions"><button type="button" className="m-outline-button" onClick={close}>Cancelar</button><button className="primary-button">Salvar lead</button></div>
+      </form>
       {modal==="followUp" && selectedLead && <form className="m-modal-form" onSubmit={updateLead}><strong>{selectedLead.name} · {selectedLead.person}</strong><Field label="Etapa comercial"><select name="stage" defaultValue={selectedLead.stage} className="m-control">{stages.map(s=><option key={s}>{s}</option>)}</select></Field><Field label="Observação"><textarea name="note" className="m-control" rows="3" defaultValue={selectedLead.note} /></Field><div className="m-modal-actions"><button type="button" className="m-outline-button" onClick={close}>Cancelar</button><button className="primary-button">Salvar follow-up</button></div></form>}
       {modal==="leadContact" && selectedLead && <div className="m-modal-form"><p><strong>{selectedLead.name}</strong> · {selectedLead.person}</p><p>O Figma não fornece um telefone verificado para este lead. O WhatsApp não será aberto com um número inventado.</p><button type="button" className="primary-button m-full-button" onClick={()=>open("followUp")}>Registrar follow-up</button></div>}
       {modal==="saleConfirm" && <div className="m-modal-form">
