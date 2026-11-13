@@ -197,3 +197,7 @@ textarea.m-control { height:auto; padding:12px; resize:vertical; }
  .m-table-scroll { overflow:visible; }
  .m-report-grid, .m-report-lower { break-inside:avoid; }
 }
+
+.m-demo-footer { display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap; }
+.m-reset { background:transparent;border:1px solid #d9c5df;color:#6f347c;font-size:11px;border-radius:8px;padding:9px 12px;white-space:nowrap; }
+.m-reset:hover { background:#f3eaf5; }
