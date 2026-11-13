@@ -200,7 +200,7 @@ export default function Modules({ active, onMenuClick, onNavigate }) {
             <button className="m-outline-button" type="button" onClick={() => open("clientNew")}>+ Cadastrar cliente</button>
           </div></section>
           <section className="panel m-section"><h2>2. Produto</h2><div className="m-fields-row">
-            <Field label="Tamanho"><Select value={size} onChange={setSize} choices={["10L", "5L"]} /></Field>
+            <Field label="Tamanho"><Select value={size} onChange={(v) => { setSize(v); setFinalPrice(v === "10L" ? 110 : 65); }} choices={["10L", "5L"]} /></Field>
             <Field label="Sabor"><Select value={flavor} onChange={setFlavor} choices={flavors} /></Field>
             <Field label="Quantidade"><input className="m-control" aria-label="Quantidade de caixas" min="1" step="1" type="number" value={quantity} onChange={e => setQuantity(Number(e.target.value))} /></Field>
           </div><p className={"m-assist " + (product.quantity < quantity ? "m-text-danger" : "m-text-success")}>Disponível em estoque: {product.quantity} caixas</p></section>
@@ -333,7 +333,7 @@ export default function Modules({ active, onMenuClick, onNavigate }) {
       </div>
       <div className="m-secondary-link"><button type="button" onClick={()=>open("diagnosis")}>Ver diagnóstico de desempenho do case →</button></div>
     </>}
-    <footer className="m-demo-footer">Protótipo interativo baseado no Figma Secret Açaí · Dados demonstrativos de agosto de 2026 · Alterações salvas somente neste navegador, não em um servidor.</footer>
+    <footer className="m-demo-footer"><span>Protótipo interativo baseado no Figma Secret Açaí · Dados demonstrativos de agosto de 2026 · Alterações salvas somente neste navegador, não em um servidor.</span><button type="button" className="m-reset" onClick={() => { if (!window.confirm("Restaurar os dados originais do Figma? As alterações desta demonstração serão apagadas deste navegador.")) return; ["secret-acai-stock-2026-v1","secret-acai-clients-2026-v1","secret-acai-leads-2026-v1","secret-acai-moves-2026-v1","secret-acai-sales-2026-v1"].forEach(key => window.localStorage.removeItem(key)); window.location.reload(); }}>Restaurar dados do Figma</button></footer>
     {modal && <Modal title={{
       clientNew:"Novo cliente", stockEntry:"Registrar entrada", stockAdjust:"Ajustar estoque", leadNew:"Novo lead",
       followUp:"Follow-up",leadContact:"Contato comercial",saleConfirm:"Confirmar venda",saleSuccess:"Venda registrada",
