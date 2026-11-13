@@ -164,14 +164,18 @@ export default function Modules({ active, onMenuClick, onNavigate }) {
   function handleStockForm(e) {
     e.preventDefault();
     const d = new FormData(e.currentTarget);
-    const id = String(d.get("size")) + "-" + String(d.get("flavor"));
+    const id = modal === "stockAdjust" ? String(d.get("product")) : String(d.get("size")) + "-" + String(d.get("flavor"));
     const p = stock.find(item => item.id === id);
     const qty = Number(d.get("quantity"));
-    if (!p || !Number.isInteger(qty) || qty < 0) { setFormError("Informe um número válido de caixas."); return; }
+    if (!p || !Number.isInteger(qty) || (modal === "stockEntry" && qty < 1)) { setFormError("Informe uma quantidade válida de caixas."); return; }
+    if (qty === 0 || p.quantity + qty < 0) { setFormError("A quantidade não pode resultar em estoque negativo ou em ajuste sem alteração."); return; }
     if (modal === "stockAdjust" && !String(d.get("reason") || "").trim()) { setFormError("Informe o motivo do ajuste."); return; }
-    const delta = modal === "stockAdjust" ? qty - p.quantity : qty;
-    updateStock(id, delta);
-    newMovement(delta >= 0 ? "Entrada" : "Saída", p, delta, modal === "stockAdjust" ? "Ajuste: " + d.get("reason") : "Produção");
+    updateStock(id, qty);
+    const reason = modal === "stockAdjust" ? "Ajuste: " + String(d.get("reason")) + " · " + String(d.get("justification")) : String(d.get("origin") || "Produção");
+    const formDate = String(d.get("date") || "");
+    const formTime = String(d.get("time") || "");
+    const dateLabel = formDate ? formDate.split("-").reverse().join("/") + " · " + formTime : createdNow();
+    setMovements(items => [{ when: modal === "stockEntry" ? dateLabel : createdNow(), type: qty >= 0 ? "Entrada" : "Saída", product: p.size + " " + p.flavor, quantity: Math.abs(qty) + " caixas", reason }, ...items]);
     close();
   }
   function handleLeadForm(e) {
@@ -357,11 +361,25 @@ export default function Modules({ active, onMenuClick, onNavigate }) {
         <p className="m-muted">Evite registrar informações pessoais sem necessidade operacional. Nesta demonstração, somente o nome e a entrega são salvos no navegador.</p>
         <div className="m-impact"><strong>Dados visíveis conforme perfil de acesso</strong><span>Funcionários operacionais recebem somente os campos necessários para atender e vender. As permissões reais ainda não estão conectadas.</span></div>
         <div className="m-modal-actions"><button type="button" onClick={close} className="m-outline-button">Cancelar</button><button className="primary-button">Salvar cliente</button></div></form>}
-      {(modal==="stockEntry" || modal==="stockAdjust") && <form onSubmit={handleStockForm} className="m-modal-form">
+      {modal==="stockEntry" && <form onSubmit={handleStockForm} className="m-modal-form">
         <div className="m-fields-row m-fields-two"><Field label="Tamanho" required><select name="size" className="m-control"><option>10L</option><option>5L</option></select></Field><Field label="Sabor" required><select name="flavor" className="m-control">{flavors.map(f=><option key={f}>{f}</option>)}</select></Field></div>
-        <Field label={modal==="stockEntry"?"Quantidade de entrada":"Novo saldo total"} required><input className="m-control" name="quantity" type="number" min={modal==="stockEntry"?"1":"0"} step="1" defaultValue={modal==="stockEntry"?"20":"32"} required /></Field>
-        {modal==="stockAdjust"&&<Field label="Motivo do ajuste" required><textarea className="m-control" name="reason" rows="3" required placeholder="Ex: correção de contagem ou avaria" /></Field>}
-        <div className="m-modal-actions"><button type="button" className="m-outline-button" onClick={close}>Cancelar</button><button className="primary-button">Salvar movimentação</button></div>
+        <Field label="Quantidade" required><input className="m-control" name="quantity" type="number" min="1" step="1" defaultValue="20" required /></Field>
+        <Field label="Origem" required><select className="m-control" name="origin"><option>Produção</option><option>Reposição</option><option>Devolução</option></select></Field>
+        <div className="m-fields-row m-fields-two"><Field label="Data"><input className="m-control" type="date" name="date" defaultValue="2026-08-20" /></Field><Field label="Horário"><input className="m-control" type="time" name="time" defaultValue="20:40" /></Field></div>
+        <Field label="Observação"><textarea className="m-control" name="note" rows="2" placeholder="Ex: lote produzido hoje, conferido por Luana" /></Field>
+        <div className="m-impact"><strong>Impacto no estoque</strong><span>10L Tradicional · 32 → 52 caixas no exemplo de interface</span></div>
+        <p className="m-muted">Registro auditável: o histórico demonstrativo fica somente neste navegador.</p>
+        <div className="m-modal-actions"><button type="button" className="m-outline-button" onClick={close}>Cancelar</button><button className="primary-button">Registrar entrada</button></div>
+      </form>}
+      {modal==="stockAdjust" && <form onSubmit={handleStockForm} className="m-modal-form">
+        <div className="m-warning"><strong>Acesso restrito</strong><span>Na aplicação real, apenas gestor e contadora podem alterar saldo manualmente. Esta versão é uma simulação sem autenticação.</span></div>
+        <Field label="Produto" required><select className="m-control" name="product" defaultValue="10L-Cupuaçu">{stock.map(p=><option key={p.id} value={p.id}>{p.size} · {p.flavor} ({p.quantity} caixas)</option>)}</select></Field>
+        <Field label="Motivo" required><select className="m-control" name="reason"><option>Avaria</option><option>Correção de contagem</option><option>Perda</option><option>Devolução</option></select></Field>
+        <Field label="Quantidade" required><input className="m-control" name="quantity" type="number" step="1" defaultValue="-2" required /></Field>
+        <Field label="Justificativa" required><textarea className="m-control" name="justification" required rows="2" placeholder="Ex: 2 caixas danificadas durante armazenamento" /></Field>
+        <div className="m-impact"><strong>Resultado do ajuste</strong><span>10L Cupuaçu · 8 → 6 caixas no exemplo de interface. O saldo final é validado ao salvar.</span></div>
+        <p className="m-muted">Sem exclusão silenciosa: o ajuste gera uma nova movimentação; o registro original não é apagado.</p>
+        <div className="m-modal-actions"><button type="button" className="m-outline-button" onClick={close}>Cancelar</button><button className="primary-button">Aplicar ajuste</button></div>
       </form>}
       {modal==="leadNew" && <form onSubmit={handleLeadForm} className="m-modal-form">
         <Field label="Empresa / negócio" required><input name="name" className="m-control" placeholder="Ex: Bowl da Vila" required /></Field>
