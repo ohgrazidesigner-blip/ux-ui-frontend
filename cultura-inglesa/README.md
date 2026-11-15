@@ -23,9 +23,9 @@ The original mockup contained addresses that didn't match public listings, so I 
 - **Pituba:** Rua Mato Grosso, 481, listed by Cambridge English and the institution.
 - **Ondina:** Rua Professor Sabino Silva, 601, listed by Cambridge English and the institution.
 - **Graça:** Rua Flórida. Cambridge lists number **208**, while another historical reference lists **280**. I haven't established which number applied to the 2018–2019 project, so the demo doesn't choose one.
-- **Vilas do Atlântico:** appears in historical references, but I couldn't corroborate a precise street address.
+- **Vilas do Atlântico:** I kept **Praia de Stela, S/N** exactly as it appears in the original project. Other public historical listings use Rua Praia de Suapé, so I can't independently confirm the original address. I'm keeping the design reference, not presenting it as verified directions.
 
-References: [Cambridge English — find a centre](https://www.cambridgeenglish.org/br/exams-and-tests/linguaskill/information-about-the-exam/onde-encontrar/) and [Cultura Inglesa — units](https://www.culturainglesa.com.br/).
+References: [Cambridge English — find a centre](https://www.cambridgeenglish.org/br/exams-and-tests/linguaskill/information-about-the-exam/onde-encontrar/), [Cultura Inglesa — units](https://www.culturainglesa.com.br/) and [historical unit listing](https://novoportal.sinal.org.br/convenios/cultura-inglesa-ingles/).
 
 **The map is an illustration, not a directions service.** Its marker coordinates are approximate. Historical phone numbers were removed from click-to-call actions; the contact buttons now lead to the demo form. This is not an official institutional website.
 
