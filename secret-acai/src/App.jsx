@@ -90,7 +90,7 @@ function Dashboard({ period, onPeriodChange, onSaleClick, onMenuClick, onNavigat
   return (
     <main id="conteudo" className="main-content">
       <header className="topbar">
-        <div className="title-block"><button type="button" className="mobile-menu-button" onClick={onMenuClick} aria-controls="main-menu" aria-label="Abrir menu de navegação" aria-expanded={mobileOpen}>Menu</button><h1>Dashboard</h1><p>Visão geral da operação e relacionamento com clientes</p></div>
+        <div className="title-block"><button type="button" className="mobile-menu-button" onClick={onMenuClick} aria-controls="main-menu" aria-label="Menu de navegação — abrir" aria-expanded={mobileOpen}>Menu</button><h1>Dashboard</h1><p>Visão geral da operação e relacionamento com clientes</p></div>
         <div className="topbar-actions">
           <label className="period-select"><span className="filter-dot" aria-hidden="true" /><span className="sr-only">Período do gráfico</span>
             <select value={period} onChange={(e) => onPeriodChange(Number(e.target.value))}><option value={30}>Ago 2026</option><option value={7}>7 dias</option></select>
