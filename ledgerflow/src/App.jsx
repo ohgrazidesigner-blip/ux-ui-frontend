@@ -3,6 +3,7 @@ import brandMark from "./assets/ledgerflow-mark.svg";
 import "./styles.css";
 import Modules from "./Modules.jsx";
 import { MobileOverview, MobileMore } from "./MobileViews.jsx";
+import MobileModule from "./MobileModules.jsx";
 
 const FIGMA_URL = "https://www.figma.com/design/79LeQIZXXjuWcoDleD5Pf2?node-id=287-10";
 const navItems = [
@@ -115,6 +116,9 @@ export default function App() {
   const [selected, setSelected] = useState(null);
   const [menuOpen, setMenuOpen] = useState(false);
   const menuPreviouslyOpen = useRef(false);
+  const [mobileExpanded,setMobileExpanded] = useState(false);
+  const [mobileInitialView,setMobileInitialView] = useState(null);
+  const mobileSpecial = ["Empresas","Importações","Fiscal","Pendências","Relatórios"].includes(page);
   const visibleCompanies = useMemo(() => {
     const term = query.trim().toLocaleLowerCase("pt-BR");
     return companies.filter((company) =>
@@ -152,6 +156,8 @@ export default function App() {
   const navigate = (item) => {
     setPage(item);
     setQuery("");
+    setMobileExpanded(false);
+    setMobileInitialView(null);
     setMenuOpen(false);
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
@@ -203,7 +209,14 @@ export default function App() {
           ) : page === "Mais" ? (
             <MobileMore onNavigate={navigate}/>
           ) : (
-            <Modules page={page} onNavigate={navigate} search={query} />
+            <>
+              {mobileSpecial&&<div className={"ledger-mobile-module-summary"+(mobileExpanded?" is-collapsed":"")}>
+                <MobileModule page={page} onNavigate={navigate} onExpand={view=>{setMobileInitialView(view||null);setMobileExpanded(true);}}/>
+              </div>}
+              <div className={"ledger-full-module"+(mobileSpecial&&!mobileExpanded?" is-collapsed":"")}>
+                <Modules key={page+":"+(mobileInitialView||"index")} page={page} onNavigate={navigate} search={query} initialView={mobileInitialView}/>
+              </div>
+            </>
           )}
         </main>
       </div>
