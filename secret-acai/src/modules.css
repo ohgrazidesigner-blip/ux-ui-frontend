@@ -16,7 +16,7 @@ textarea.m-control { height:auto; padding:12px; resize:vertical; }
 .m-text-success { color:#2e7d57!important; }
 .m-text-danger { color:#bd2943!important; }
 .m-purple { color:#6f347c; }
-.m-muted { color:#847c88; font-size:12px; line-height:1.55; }
+.m-muted { color:var(--muted); font-size:12px; line-height:1.55; }
 .m-assist { margin:12px 0 0; color:#2e7d57; font-weight:600; font-size:12px; }
 .m-error { padding:10px 14px; border-radius:9px; background:#fff1f3; color:#af2141; font-size:12px; margin:10px 0; }
 .m-sale-layout { display:grid; grid-template-columns:minmax(0,2.08fr) minmax(265px,.98fr); gap:18px; align-items:start; }
