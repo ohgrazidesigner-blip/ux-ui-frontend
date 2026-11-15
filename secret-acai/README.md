@@ -1,50 +1,99 @@
 # Secret Açaí — Sales & Operations Platform
 
-**Product design case (2026) | Front-End reconstruction (2026)**
+**Product design case study (2026) · React front-end implementation (2026)**
 
-A responsive, interactive React implementation of the Secret Açaí Figma project. This portfolio demo reproduces the principal operating screens and uses the same interface copy, sample names, statuses, sales values, product variants and visual language shown in the design.
+A responsive commercial operations interface translated from the original Secret Açaí Figma design into a working React demonstration. It brings sales registration, inventory, customer records, prospecting and reporting into one consistent navigation system.
 
-**Links**
-- [Live front-end demo](https://ohgrazidesigner-blip.github.io/ux-ui-frontend/secret-acai/)
-- [Figma — case study](https://www.figma.com/design/OmJYOxXm1vFodkfZBXwDd3?node-id=116-2)
-- [Figma — screens and flows](https://www.figma.com/design/OmJYOxXm1vFodkfZBXwDd3?node-id=0-1)
-- [Behance — original design case](https://www.behance.net/gallery/254661851/Secret-Acai-Sales-Operations-Platform)
+**[Live demo](https://ohgrazidesigner-blip.github.io/ux-ui-frontend/secret-acai/)** · **[Figma case study](https://www.figma.com/design/OmJYOxXm1vFodkfZBXwDd3?node-id=116-2)** · [Figma screens](https://www.figma.com/design/OmJYOxXm1vFodkfZBXwDd3?node-id=0-1) · [Behance case](https://www.behance.net/gallery/254661851/Secret-Acai-Sales-Operations-Platform)
 
-## Front-end scope
+[![Real browser capture of the Secret Açaí React dashboard](../showcase/assets/secret-acai-desktop.jpg)](https://ohgrazidesigner-blip.github.io/ux-ui-frontend/secret-acai/)
 
-- **Dashboard:** KPI cards, illustrative sales chart, inactive-customer list, lead pipeline summary and low-stock list.
-- **Sales:** client selection, product size/flavour, quantities, prices, discounts, delivery options and order summary; validation, confirmation, low-stock handling and simulated successful transactions.
-- **Inventory:** all eight product variants, balances, pricing, status labels, filters, stock entries, corrections and local movement history.
-- **Customers:** customer table, filters, last-order dates, inactivity ranking, client registration and reactivation review.
-- **Prospecting:** three-column board (Contatado, Negociando, Convertido), sample lead cards, search, origin filter, lead registration and follow-up editing.
-- **Reports:** period selector, example KPIs, revenue charts, comparative metrics and client summary; print-to-PDF through the browser.
+*Actual front-end screenshot, not a Figma mockup. [View mobile capture](../showcase/assets/secret-acai-mobile.jpg).*
 
-Styles and content are modeled on the 2026 design reference. Smaller viewports use a drawer and stacked cards. Buttons, filters and supported demo forms are functional. Additional screens and backend integration remain out of scope for this version.
+## Project context and my contribution
 
-## Important demo limitation
+The objective was to translate the original product design into a usable, responsive **front-end demonstration** while preserving its sample content, typography, visual hierarchy and business vocabulary. This implementation uses independently written React components and local browser state; it **does not** reuse or claim access to a company's production code or data.
 
-**This is not the real Secret Açaí production platform.** The original Figma values (including revenues, order numbers, customer names and stock levels) are **illustrative design data**, not verified live business data. New entries, stock movements, leads and simulated sales persist only in the current browser's local storage. They do not reach a server and are not shared between devices.
+## Implemented modules
 
-The **Dashboard KPIs, charts, stock summary totals, and monthly report figures are fixed August 2026 design snapshots** matching the Figma, not calculations from newly entered demo transactions. The stock table, movement history, and the latest-movement indicator do reflect local demo changes. Sales and inventory records **do** update the corresponding front-end module and are persisted in this browser, but they do not recalculate the historical dashboard or report cards. This boundary avoids presenting sample metrics as real-time business performance.
+| Module | Implemented behavior |
+| --- | --- |
+| **Dashboard** | August 2026 reference KPIs, sales chart, low-stock indicators and navigation to operational sections |
+| **Sales** | Customer and product selection, quantities, final-price entry, simulated discount confirmation, order confirmation and stock deduction |
+| **Inventory** | Eight sample product variants, size/flavour/status filters, stock entry and correction forms, movement history |
+| **Customers** | Search and filters, sample customer records, client registration and reactivation review |
+| **Prospecting** | Three-stage lead board, search/filter, lead creation and follow-up editing |
+| **Reports** | Illustrative period views, sample charts and browser print/export flow |
 
-Login, managerial approval, WhatsApp contact numbers, PDF generation on a server, historical analytics, access-control policies and Supabase/Postgres/RLS/RPC services described in the technical design **are not connected**. The application does not claim to process real payments or commercial transactions.
+The mobile experience uses a slide-out navigation drawer and content layouts adapted for narrow screens. Supported forms, dialogs, filters and navigational actions are implemented; visually present elements without a connected service are described as demonstrations.
 
-## Tech stack
+## Working front-end interactions vs illustrative data
 
-- React + Vite
-- CSS Grid, Flexbox and CSS custom properties
-- Semantic HTML, labels, keyboard focus and mobile navigation
-- Browser localStorage for simulated actions
+**Interactive and persisted in this browser:** supported simulated sales, stock adjustments, customer records, leads and local movement history. These actions are backed by React state and `localStorage`. Changes stay on the same browser/device and are not synchronized with other users.
 
-## Running locally
+**Illustrative, not live:** the Dashboard KPIs, historical sales charts, stock **summary totals** and monthly report figures are **fixed design snapshots** from August 2026. A newly entered sale can update the local inventory table and movements **without recalculating** those historical Dashboard/report values. The distinction is intentional: static reference values must not be presented as real-time commercial analytics.
+
+**Not connected:** login, server data storage, real payments, WhatsApp messaging, managerial approval, server-generated PDFs, historical BI, Supabase/Postgres or other access-control services. Printing a report uses the **browser's** print-to-PDF capability, not a server-generated file.
+
+## Technology and architecture
+
+| Area | Implementation |
+| --- | --- |
+| UI | React 19 and React DOM |
+| Tooling | Vite 6 with the React plugin |
+| Styles | CSS, Grid/Flexbox, custom properties and responsive layout rules |
+| State | React hooks and a localStorage-backed `useStored` helper |
+| Behavior | Client-side forms, validation, conditional dialogs and calculated demo quantities |
+| Deployment | Static Vite build published at a GitHub Pages subpath |
+
+```text
+secret-acai/
+├── index.html
+├── package.json
+├── vite.config.js      Relative base path for GitHub Pages
+├── src/
+│   ├── main.jsx        React entry point
+│   ├── App.jsx         Shell, sidebar, dashboard and navigation
+│   ├── Modules.jsx     Sales, inventory, customers, leads, reports
+│   ├── styles.css      Shared layout and visual tokens
+│   └── modules.css     Module-specific styling
+└── README.md
+```
+
+The code keeps the dashboard shell separate from the operational modules. The demo's small data seeds and browser persistence are deliberately local: replacing them with a real service would require authentication, data modelling, business-rule validation and server-side permissions, none of which are represented as implemented here.
+
+## Accessibility and quality checks
+
+The interface includes responsive navigation, explicit labels for module filters, keyboard interaction with dialogs, Escape handling, focus restoration and focus containment in open modal flows.
+
+The repository's [Secret Açaí CI audit](../.github/workflows/validate-secret-acai.yml) builds both React projects and runs [Playwright browser tests](../.github/scripts/secret-acai-browser.cjs), including responsive widths, a simulated sale, stock persistence, dialog navigation and automated axe WCAG A/AA scanning. The November 2026 run reported **zero automated violations** across the six tested modules. This does **not** replace manual screen-reader testing, or certify full WCAG conformance.
+
+## Key design-to-code decisions
+
+1. **Keep original content and visual language.** The implementation follows the source Figma instead of replacing it with a generic admin template.
+2. **Protect high-impact actions in the UI.** Pricing/discount rules and stock effects are demonstrated through explicit confirmation steps. No real manager approval occurs.
+3. **Respect responsive navigation.** The mobile drawer is excluded from keyboard navigation when hidden and manages focus when open.
+4. **Make the prototype's boundary obvious.** Historical KPIs remain static even when example records in localStorage change.
+
+## Run locally
+
+From the repository root:
 
 ```bash
+cd secret-acai
 npm install
 npm run dev
 ```
 
-Production build: `npm run build`.
+For a production-style local build:
 
-## Implementation notes
+```bash
+npm run build
+npm run preview
+```
 
-This code is an independent front-end reproduction of the interface. It does not reuse any private source code or claim to be the company's official production system. The project uses the Figma design as its source of truth for visible strings, proportions and components. Some required browser controls differ modestly from the static prototype for keyboard and touch usability.
+The Vite configuration uses `base: "./"` for deployment at a relative GitHub Pages subpath. There is no backend service or configuration secret to provide.
+
+---
+
+**Scope:** Design-to-code portfolio demonstration. **All** customers, sales values and other displayed business records are illustrative, not production records.

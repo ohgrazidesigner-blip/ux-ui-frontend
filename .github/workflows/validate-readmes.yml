@@ -1,0 +1,32 @@
+name: Validate portfolio documentation
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'README.md'
+      - 'cultura-inglesa/README.md'
+      - 'secret-acai/README.md'
+      - 'ledgerflow/README.md'
+      - '.github/scripts/validate-readmes.cjs'
+      - '.github/workflows/validate-readmes.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  readmes:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Validate relative links, code fences, screenshots and project setup
+        run: node .github/scripts/validate-readmes.cjs
+      - name: Verify documentation changes do not break JavaScript syntax
+        run: |
+          node --check cultura-inglesa/js/main.js
+          node --check cultura-inglesa/js/map-config.js
+          node --check showcase/script.js
