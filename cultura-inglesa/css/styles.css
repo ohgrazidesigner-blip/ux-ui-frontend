@@ -81,6 +81,8 @@ body.menu-open { overflow: hidden; }
 .hero { display: grid; grid-template-columns: 1fr 1fr; min-height: 620px; background: var(--gray-hero); border-bottom: 1px solid var(--gray-hero-line); position: relative; z-index: 1; }
 .hero-copy { padding: 126px 72px 80px 112px; display: flex; flex-direction: column; align-items: flex-start; gap: 22px; }
 .eyebrow { color: var(--red); font-weight: 700; font-size: 14px; }
+/* A darker red variant retains the brand hue and passes 4.5:1 against the hero gray. */
+.hero .eyebrow { color: #b5242b; }
 .hero h1 { font-size: 52px; line-height: 1.14; font-weight: 700; color: var(--navy); max-width: 540px; }
 .hero-sub { font-size: 18px; line-height: 28px; color: var(--slate); max-width: 530px; }
 .btn-hero { width: 330px; max-width: 100%; height: 52px; border-radius: 26px; font-size: 14px; padding: 12px 22px; }
