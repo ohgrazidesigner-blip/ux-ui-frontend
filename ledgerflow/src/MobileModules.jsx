@@ -4,7 +4,7 @@ import "./mobile-modules.css";
 
 /** Original sample screens from Figma: M03, M05, M08, M10 and M14. */
 function Heading({ title, subtitle }) {
-  return <><h1 className="lfm-title">{title}</h1><p className="lfm-subtitle">{subtitle}</p></>;
+  return <><h1 className="lfm-title">{title}</h1>{subtitle&&<p className="lfm-subtitle">{subtitle}</p>}</>;
 }
 function Stat({ value, caption, tone }) {
   return <article className="lfm-stat"><strong className={"lfm-tone-"+tone}>{value}</strong><span>{caption}</span></article>;
@@ -29,7 +29,7 @@ function Companies({ onExpand }) {
       </button>)}
       {!records.length&&<p role="status">Nenhuma empresa corresponde à busca.</p>}
     </div>
-    <p className="lfm-disclosure">Quatro exemplos móveis do Figma. A carteira completa é demonstrativa.</p>
+    <p className="sr-only">Quatro exemplos ilustrativos do Figma; a carteira completa exige dados de produção não incluídos.</p>
   </>;
 }
 function Imports({onExpand}) {
