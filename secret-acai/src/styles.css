@@ -128,3 +128,9 @@ a { color: var(--purple); }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { scroll-behavior: auto !important; transition-duration: .01ms !important; animation-duration: .01ms !important; }
 }
+
+/* Keep the prospecting card compact on phones, rather than reserving desktop height. */
+@media (max-width: 760px) {
+  .leads-panel { min-height: 0; }
+  .leads-panel > p { margin-top: 16px; }
+}
