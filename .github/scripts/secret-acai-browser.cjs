@@ -61,7 +61,8 @@ const path = require("node:path");
         first: document.querySelector("#main-menu .nav-item")?.outerHTML.slice(0,200),
         sidebarClass: document.getElementById("main-menu")?.className,
         sidebarVisibility: getComputedStyle(document.getElementById("main-menu")).visibility,
-        firstVisibility: getComputedStyle(document.querySelector("#main-menu .nav-item")).visibility
+        firstVisibility: getComputedStyle(document.querySelector("#main-menu .nav-item")).visibility,
+        manualFocusWorked: (() => { const first = document.querySelector("#main-menu .nav-item"); first.focus(); return document.activeElement === first; })()
       }));
       throw new Error("Mobile drawer focus never entered first item: " + JSON.stringify(diagnostic));
     }
