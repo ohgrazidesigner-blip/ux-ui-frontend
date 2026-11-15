@@ -18,7 +18,7 @@ A portfolio demonstration developed with **React 19, Vite 6, HTML and CSS** from
 - **Pending items and communications:** operational tasks and local-only message replies.
 - **Automation:** recurring-rule form, preview, mismatch safeguards and review simulation.
 - **Settings and audit:** illustrative governance rules, permissions and decision logs.
-- **Mobile:** separate original Figma **M02 Início** (risk and priority cards) and **M17 Mais** (eight-module directory); all key modules are reachable from mobile navigation.
+- **Mobile:** dedicated original Figma summaries for **M02 Início**, **M03 Empresas**, **M05 Importações**, **M08 Fiscal**, **M10 Relatórios**, **M14 Pendências** and **M17 Mais**. The mobile cards also provide access to the complete detailed front-end flows where implemented.
 
 ## What works in this front-end
 
