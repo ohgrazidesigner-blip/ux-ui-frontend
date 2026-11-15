@@ -2,7 +2,7 @@
    Desktop source composition remains unchanged. */
 .ledger-mobile-overview { display: none; }
 .ledger-mobile-more { max-width: 540px; margin: 0 auto; }
-.mobile-active-context { background: #eff6ff; border: 1px solid #dbe5f2; border-radius: 10px; min-height: 44px; padding: 12px; display:flex; justify-content:space-between; align-items:center; gap:8px; margin-bottom: 24px; font-size:12px; }
+.mobile-active-context { background: #eff6ff; border: 1px solid #dbe5f2; border-radius: 10px; min-height: 40px; padding: 9px 12px; display:flex; justify-content:space-between; align-items:center; gap:8px; margin-bottom: 24px; font-size:12px; }
 .mobile-active-context strong { font-weight:600; }
 .mobile-active-context span { color:#2563eb; }
 .ledger-mobile-more h1, .ledger-mobile-overview h1 { font-size: 24px; letter-spacing:-.5px; line-height:1.25; margin:0; }
