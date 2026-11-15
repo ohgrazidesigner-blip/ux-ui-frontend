@@ -27,8 +27,8 @@ jobs:
           node-version: '22'
       - name: Build the existing React projects
         run: |
-          npm --prefix secret-acai ci --no-audit --no-fund
-          npm --prefix ledgerflow ci --no-audit --no-fund
+          npm --prefix secret-acai install --no-audit --no-fund
+          npm --prefix ledgerflow install --no-audit --no-fund
           npm --prefix secret-acai run build
           npm --prefix ledgerflow run build
       - name: Install Chromium browser
