@@ -224,7 +224,7 @@ body.menu-open { overflow: hidden; }
 .dict-src input { appearance: none; -webkit-appearance: none; width: 9px; height: 9px; margin: 0; background: url("../assets/radio.svg") center / contain no-repeat; cursor: pointer; }
 .dict-src input:checked { background-image: url("../assets/radio-selected.svg"); }
 .dict-btn { width: 156px; height: 44px; border-radius: 18px; border: 1px solid #abc2cf; background: transparent; color: #fff; font-size: 12px; }
-.f-legal { display: none; }
+.f-legal { display: block; max-width: 850px; margin: 4px auto 0; padding: 0 24px; color: #c7d1d8; font-size: 11px; line-height: 1.6; text-align: center; }
 .footer-bottom { position: relative; margin: 0 64px; border-top: 1px solid rgba(255,255,255,.16); padding: 28px 0 28px; display: flex; align-items: center; gap: 16px; }
 .f-nav { display: flex; gap: 0; font-size: 12px; color: #d1dbe3; flex-wrap: wrap; }
 .f-nav li + li::before { content: "\2022"; margin: 0 12px; }
