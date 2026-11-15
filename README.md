@@ -68,6 +68,8 @@ ux-ui-frontend/
     └── workflows/                    CI and GitHub Pages publication
 ```
 
+## Local development and verification
+
 | Project | Local setup | Verification |
 | --- | --- | --- |
 | Cultura Inglesa | Serve `cultura-inglesa/` using a local HTTP server; no package install | [Browser checks](./.github/workflows/validate-cultura-inglesa.yml) |
