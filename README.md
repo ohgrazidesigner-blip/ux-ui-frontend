@@ -1,93 +1,27 @@
-# Front-End Portfolio — Graziele Costa
+# Graziele Costa — front-end projects
 
-**UX/UI Designer · Product Designer · Front-End Developer**
+I work across UX/UI design and front-end development. These are three projects I implemented from design work — each with the code, a running demo and a Figma reference.
 
-I turn original design work into responsive, functional browser interfaces. This repository brings together three front-end implementations, with direct access to **live demos, source code and their Figma references**.
+**[My Front-End portfolio](https://portfolio-grazi.vercel.app/frontend/)** · [UX/UI portfolio](https://portfolio-grazi.vercel.app/) · [GitHub Pages demo index](https://ohgrazidesigner-blip.github.io/ux-ui-frontend/)
 
-**[Explore the live showcase](https://ohgrazidesigner-blip.github.io/ux-ui-frontend/)** · **[View my full UX/UI portfolio](https://portfolio-grazi.vercel.app/)**
-
-## Selected work
-
-<table>
-  <tr>
-    <td width="33%" valign="top">
-      <a href="https://ohgrazidesigner-blip.github.io/ux-ui-frontend/cultura-inglesa/">
-        <img src="./showcase/assets/cultura-inglesa-desktop.jpg" alt="Cultura Inglesa Salvador desktop front-end screenshot" width="360">
-      </a>
-      <p><strong>Cultura Inglesa Salvador</strong></p>
-      <p>Professional UX/UI work (2018–2019), independently rebuilt as a responsive homepage in 2026.</p>
-      <p><strong>HTML · CSS · JavaScript · Leaflet</strong></p>
-      <p><a href="https://ohgrazidesigner-blip.github.io/ux-ui-frontend/cultura-inglesa/">Live demo</a> · <a href="./cultura-inglesa/">Code &amp; README</a> · <a href="https://www.figma.com/design/90d1dR1gDk44utANiUe5eR/Cultura-Inglesa-2026">Figma</a></p>
-    </td>
-    <td width="33%" valign="top">
-      <a href="https://ohgrazidesigner-blip.github.io/ux-ui-frontend/secret-acai/">
-        <img src="./showcase/assets/secret-acai-desktop.jpg" alt="Secret Açaí React sales and operations desktop screenshot" width="360">
-      </a>
-      <p><strong>Secret Açaí</strong></p>
-      <p>Commercial operations design study brought to life with simulated sales, inventory and customer workflows.</p>
-      <p><strong>React · Vite · CSS · localStorage</strong></p>
-      <p><a href="https://ohgrazidesigner-blip.github.io/ux-ui-frontend/secret-acai/">Live demo</a> · <a href="./secret-acai/">Code &amp; README</a> · <a href="https://www.figma.com/design/OmJYOxXm1vFodkfZBXwDd3?node-id=116-2">Figma</a></p>
-    </td>
-    <td width="33%" valign="top">
-      <a href="https://ohgrazidesigner-blip.github.io/ux-ui-frontend/ledgerflow/">
-        <img src="./showcase/assets/ledgerflow-desktop.jpg" alt="LedgerFlow B2B accounting dashboard desktop screenshot" width="360">
-      </a>
-      <p><strong>LedgerFlow</strong></p>
-      <p>B2B accounting operations design study with traceable examples, dedicated mobile screens and guarded demo workflows.</p>
-      <p><strong>React · Vite · CSS</strong></p>
-      <p><a href="https://ohgrazidesigner-blip.github.io/ux-ui-frontend/ledgerflow/">Live demo</a> · <a href="./ledgerflow/">Code &amp; README</a> · <a href="https://www.figma.com/design/79LeQIZXXjuWcoDleD5Pf2?node-id=379-266">Figma</a></p>
-    </td>
-  </tr>
-</table>
-
-*All previews are real Chromium captures of the implemented websites, not Figma mockups. [Browse the six desktop/mobile images](./showcase/assets/).*
-
-## How I approach front-end work
-
-**Design fidelity.** Preserve the original interface's visual hierarchy, brand identity and content instead of replacing it with generic components.
-
-**Responsive interaction.** Adapt desktop and mobile flows deliberately, including keyboard focus, navigation, forms and touch targets.
-
-**Technical transparency.** Explain what actually works in the browser, what is illustrative Figma data, and what would require a backend or production infrastructure.
-
-These three interfaces are **portfolio demonstrations**. Cultura Inglesa is an independent reconstruction of earlier professional UX/UI work — not the institution's official website. Secret Açaí and LedgerFlow are product design studies using illustrative business/accounting records. The demo flows do not process real payments, fiscal documents or approvals.
-
-## Tech and repository map
-
-```text
-ux-ui-frontend/
-├── README.md                         This overview
-├── showcase/                         English recruiter-facing landing page
-│   ├── index.html, styles.css, script.js
-│   └── assets/                       Real desktop/mobile screenshots
-├── cultura-inglesa/                  HTML5 + CSS3 + vanilla JavaScript + Leaflet
-├── secret-acai/                       React + Vite + localStorage-backed demo
-├── ledgerflow/                        React + Vite + state-only accounting demo
-└── .github/
-    ├── scripts/                      Browser checks and screenshot captures
-    └── workflows/                    CI and GitHub Pages publication
-```
-
-## Local development and verification
-
-| Project | Local setup | Verification |
+| Project | What you'll find | Links |
 | --- | --- | --- |
-| Cultura Inglesa | Serve `cultura-inglesa/` using a local HTTP server; no package install | [Browser checks](./.github/workflows/validate-cultura-inglesa.yml) |
-| Secret Açaí | `cd secret-acai && npm install && npm run dev` | [React build and browser checks](./.github/workflows/validate-secret-acai.yml) |
-| LedgerFlow | `cd ledgerflow && npm install && npm run dev` | [React build and browser checks](./.github/workflows/validate-ledgerflow.yml) |
+| **Cultura Inglesa Salvador** | A homepage I rebuilt in HTML, CSS and JavaScript after UX/UI work in 2018–2019; responsive navigation, demo forms and a Leaflet map | [Code and README](./cultura-inglesa/) · [Live](https://ohgrazidesigner-blip.github.io/ux-ui-frontend/cultura-inglesa/) · [Figma](https://www.figma.com/design/90d1dR1gDk44utANiUe5eR/Cultura-Inglesa-2026) |
+| **Secret Açaí** | A React sales/operations demo with browser-stored sample records | [Code and README](./secret-acai/) · [Live](https://ohgrazidesigner-blip.github.io/ux-ui-frontend/secret-acai/) · [Figma](https://www.figma.com/design/OmJYOxXm1vFodkfZBXwDd3?node-id=116-2) |
+| **LedgerFlow** | A React accounting workflow concept with dedicated mobile layouts and guarded demo actions | [Code and README](./ledgerflow/) · [Live](https://ohgrazidesigner-blip.github.io/ux-ui-frontend/ledgerflow/) · [Figma](https://www.figma.com/design/79LeQIZXXjuWcoDleD5Pf2?node-id=379-266) |
 
-For a production-style build of either React app, run `npm run build` inside its folder. Both Vite apps use a relative base path to work under GitHub Pages subdirectories.
+All three have [desktop and mobile screenshots](./showcase/assets/) taken from their front-end implementations.
 
-The [Pages workflow](./.github/workflows/deploy-secret-acai-pages.yml) deploys the English showcase at the repository root and the three demos at their own paths. The [showcase validation](./.github/workflows/validate-showcase.yml) checks viewport layouts, screenshot switching, links and automated axe accessibility rules.
+## How I work
 
-The November 2026 automated audits passed for the covered checks; **manual accessibility and visual review remain necessary**. Automated WCAG rule scans are not a formal conformance certification.
+I start from the original interface and its content. Then I decide how its navigation, forms and feedback should behave in a browser. The README in each project explains what works, which values are examples, and where the demo stops.
 
-## What to explore first
+The code uses vanilla JavaScript for Cultura Inglesa and React/Vite for the other two systems. Browser tests and accessibility scans live under `.github/`, alongside the Pages deployment.
 
-For **Front-End Developer** roles, open the live demos and inspect the component structure, JavaScript interactions, responsive CSS and test workflows. For **Web Designer / UX/UI** roles, follow each project's Figma case to see the visual design and how it was translated into code.
+You can run the static Cultura Inglesa project with a basic HTTP server. For either React project, run `npm install` and `npm run dev` inside its directory. Both build with `npm run build`.
 
-**[Launch Front-End Showcase](https://ohgrazidesigner-blip.github.io/ux-ui-frontend/)** · [Full design portfolio](https://portfolio-grazi.vercel.app/)
+## A note about the data
 
----
+These are **portfolio implementations**, not connected business products. Secret Açaí and LedgerFlow use illustrative records. The Cultura Inglesa homepage is an independent reconstruction, not the institution's official website. I have also marked historical addresses that couldn't be confirmed, rather than presenting them as current service details.
 
-Created by **Graziele Costa** · UX/UI, Product Design & Front-End.
+The [Front-End portfolio](https://portfolio-grazi.vercel.app/frontend/) is the main presentation I share with development recruiters. This repository is where they can inspect the work behind it.
