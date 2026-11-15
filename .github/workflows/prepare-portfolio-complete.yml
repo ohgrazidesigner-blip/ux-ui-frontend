@@ -1,0 +1,144 @@
+name: Prepare complete portfolio ZIP
+
+on:
+  push:
+    branches: [package/full-portfolio-2026-11-15]
+    paths:
+      - '.github/workflows/prepare-portfolio-complete.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  package-portfolio:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out UX/UI portfolio
+        uses: actions/checkout@v4
+        with:
+          repository: ohgrazidesigner-blip/product-design-portfolio
+          ref: 2ee6efde7e6473ba583668d24de9109cfdb2bf63
+          path: ux-portfolio
+
+      - name: Check out Front-End projects
+        uses: actions/checkout@v4
+        with:
+          repository: ohgrazidesigner-blip/ux-ui-frontend
+          ref: 54a781088b7e7b2b80c071ca1c2a4a5856abc863
+          path: front-end-projects
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Compile web projects for offline source backup
+        run: |
+          npm --prefix ux-portfolio ci --no-audit --no-fund
+          npm --prefix ux-portfolio run build
+          npm --prefix front-end-projects/secret-acai install --no-audit --no-fund
+          npm --prefix front-end-projects/ledgerflow install --no-audit --no-fund
+          npm --prefix front-end-projects/secret-acai run build
+          npm --prefix front-end-projects/ledgerflow run build
+
+      - name: Arrange source and ready-to-host builds
+        shell: bash
+        run: |
+          set -euo pipefail
+          root="Graziele_Portfolio_Completo"
+          mkdir -p "$root/01-portfolio-ux-ui" "$root/02-projetos-front-end" "$root/03-sites-compilados"
+          rsync -a --exclude='.git' --exclude='node_modules' --exclude='dist' --exclude='.env' --exclude='.env.*' --exclude='.vercel' ux-portfolio/ "$root/01-portfolio-ux-ui/"
+          rsync -a --exclude='.git' --exclude='node_modules' --exclude='dist' --exclude='.env' --exclude='.env.*' --exclude='.vercel' front-end-projects/ "$root/02-projetos-front-end/"
+          cp -a ux-portfolio/dist "$root/03-sites-compilados/portfolio-ux-ui"
+          mkdir -p "$root/03-sites-compilados/cultura-inglesa"
+          cp -a front-end-projects/cultura-inglesa/. "$root/03-sites-compilados/cultura-inglesa/"
+          cp -a front-end-projects/secret-acai/dist "$root/03-sites-compilados/secret-acai"
+          cp -a front-end-projects/ledgerflow/dist "$root/03-sites-compilados/ledgerflow"
+          cat > "$root/LEIA-ME-PRIMEIRO.txt" <<'EOF'
+          PORTFÓLIO COMPLETO — GRAZIELE COSTA
+          Pacote: 15 de novembro de 2026
+
+          CONTEÚDO
+          01-portfolio-ux-ui/
+             Código-fonte do site principal UX/UI e da página exclusiva /frontend/.
+          02-projetos-front-end/
+             Repositório completo com Cultura Inglesa, Secret Açaí,
+             LedgerFlow, showcase, README e testes.
+          03-sites-compilados/
+             Versões produzidas pelo build para publicação estática.
+             As páginas que usam API ou fontes externas precisam de internet.
+
+          O portfólio principal contém:
+          - Home e cases de UX/UI
+          - Página separada /frontend/ (English / Português)
+          - Projeto UniFatecie e demais arquivos de código e assets presentes
+            no repositório original
+
+          COMO EDITAR / EXECUTAR LOCALMENTE
+          Site principal:
+            cd 01-portfolio-ux-ui
+            npm install
+            npm run dev
+
+          Cultura Inglesa:
+            python3 -m http.server 8080 --directory 02-projetos-front-end/cultura-inglesa
+
+          Secret Açaí:
+            cd 02-projetos-front-end/secret-acai
+            npm install
+            npm run dev
+
+          LedgerFlow:
+            cd 02-projetos-front-end/ledgerflow
+            npm install
+            npm run dev
+
+          PROJETOS NO FIGMA (LINKS, NÃO ARQUIVOS .FIG)
+          Cultura Inglesa:
+          https://www.figma.com/design/90d1dR1gDk44utANiUe5eR/Cultura-Inglesa-2026
+          Secret Açaí:
+          https://www.figma.com/design/OmJYOxXm1vFodkfZBXwDd3?node-id=116-2
+          LedgerFlow:
+          https://www.figma.com/design/79LeQIZXXjuWcoDleD5Pf2?node-id=379-266
+
+          ENDEREÇOS PUBLICADOS
+          UX/UI: https://portfolio-grazi.vercel.app/
+          Front-End exclusivo: https://portfolio-grazi.vercel.app/frontend/
+          Projetos: https://ohgrazidesigner-blip.github.io/ux-ui-frontend/
+
+          ORIGEM DAS VERSÕES DESTE PACOTE
+          UX/UI:
+          https://github.com/ohgrazidesigner-blip/product-design-portfolio
+          Commit: 2ee6efde7e6473ba583668d24de9109cfdb2bf63
+
+          Front-End:
+          https://github.com/ohgrazidesigner-blip/ux-ui-frontend
+          Commit: 54a781088b7e7b2b80c071ca1c2a4a5856abc863
+
+          OBSERVAÇÕES
+          - Este pacote inclui código, imagens e ativos versionados no GitHub.
+          - Não inclui arquivos Figma editáveis (.fig) que estão na nuvem.
+          - Não inclui node_modules; reinstale com npm install.
+          - Os sistemas operacionais simulados não têm backend produtivo.
+          EOF
+          test -s "$root/01-portfolio-ux-ui/frontend/index.html"
+          test -s "$root/01-portfolio-ux-ui/src/frontend/FrontEndPage.tsx"
+          test -s "$root/02-projetos-front-end/cultura-inglesa/index.html"
+          test -s "$root/02-projetos-front-end/secret-acai/src/App.jsx"
+          test -s "$root/02-projetos-front-end/ledgerflow/src/App.jsx"
+          test -s "$root/03-sites-compilados/portfolio-ux-ui/index.html"
+          test -s "$root/03-sites-compilados/portfolio-ux-ui/frontend/index.html"
+          test -s "$root/03-sites-compilados/secret-acai/index.html"
+          test -s "$root/03-sites-compilados/ledgerflow/index.html"
+          zip -qr Graziele_Portfolio_Completo_2026-11-15.zip "$root"
+          unzip -tq Graziele_Portfolio_Completo_2026-11-15.zip
+          du -h Graziele_Portfolio_Completo_2026-11-15.zip
+          unzip -Z1 Graziele_Portfolio_Completo_2026-11-15.zip | wc -l
+
+      - name: Save complete portfolio ZIP
+        uses: actions/upload-artifact@v4
+        with:
+          name: grazi-portfolio-completo
+          path: Graziele_Portfolio_Completo_2026-11-15.zip
+          if-no-files-found: error
+          retention-days: 7
