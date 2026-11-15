@@ -86,7 +86,7 @@ function DetailPanel({ title, id, children, onViewAll }) {
   );
 }
 
-function Dashboard({ period, onPeriodChange, onSaleClick, onMenuClick, onNavigate }) {
+function Dashboard({ period, onPeriodChange, onSaleClick, onMenuClick, onNavigate, mobileOpen }) {
   return (
     <main id="conteudo" className="main-content">
       <header className="topbar">
@@ -156,7 +156,7 @@ export default function App() {
       <a href="#conteudo" className="skip-link">Pular para o conteúdo</a>
       <Sidebar active={active} onNavigate={setActive} mobileOpen={mobileOpen} onClose={() => setMobileOpen(false)} />
       {active === "Dashboard" ? (
-        <Dashboard period={period} onPeriodChange={setPeriod} onSaleClick={() => setActive("Vendas")} onMenuClick={() => setMobileOpen(true)} onNavigate={setActive} />
+        <Dashboard period={period} onPeriodChange={setPeriod} onSaleClick={() => setActive("Vendas")} onMenuClick={() => setMobileOpen(true)} onNavigate={setActive} mobileOpen={mobileOpen} />
       ) : (
         <Modules active={active} onMenuClick={() => setMobileOpen(true)} onNavigate={setActive} mobileOpen={mobileOpen} />
       )}
