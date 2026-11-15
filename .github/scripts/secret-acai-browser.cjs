@@ -53,7 +53,7 @@ const path = require("node:path");
     await menuTrigger.click();
     assert.equal(await page.locator("#main-menu").getAttribute("role"), "dialog");
     assert.equal(await menuTrigger.getAttribute("aria-expanded"), "true");
-    assert.equal(await page.locator(".nav-item").first().evaluate(el => document.activeElement === el), true);
+    await page.waitForFunction(() => document.activeElement === document.querySelector("#main-menu .nav-item"));
     await page.keyboard.press("Shift+Tab");
     assert.equal(await page.locator(".nav-item").last().evaluate(el => document.activeElement === el), true);
     await page.keyboard.press("Escape");
