@@ -34,7 +34,10 @@ const assert = require("node:assert/strict");
       for(const name of items) {
         if(name!=="Visão Geral")await openSection(name);
         const value=await page.evaluate(()=>({scroll:document.documentElement.scrollWidth,client:document.documentElement.clientWidth}));
-        if(value.scroll>value.client+2)issues.push("Horizontal overflow "+name+" at "+width+"px: "+JSON.stringify(value));
+        if(value.scroll>value.client+2) {
+          const offenders=await page.evaluate(() => [...document.querySelectorAll("*")].map(el=>({tag:el.tagName.toLowerCase(),className:typeof el.className==="string"?el.className:"",right:Math.round(el.getBoundingClientRect().right),width:Math.round(el.getBoundingClientRect().width)})).filter(el=>el.right>document.documentElement.clientWidth+2).sort((a,b)=>b.right-a.right).slice(0,12));
+          issues.push("Horizontal overflow "+name+" at "+width+"px: "+JSON.stringify(value)+"; candidates: "+JSON.stringify(offenders));
+        }
         if(width===390||width===1536) {
           const slug=({"Visão Geral":"home","Empresas":"empresas","Importações":"importacoes","Conciliação":"conciliacao","Fiscal":"fiscal","Relatórios":"relatorios","Obrigações":"obrigacoes","Pendências":"pendencias","Comunicações":"comunicacoes","Automação":"automacao","Configurações":"configuracoes"})[name];
           await page.screenshot({path:path.join(root,slug+"-"+width+".png"),fullPage:true,animations:"disabled"});
