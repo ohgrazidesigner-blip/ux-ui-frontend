@@ -39,7 +39,7 @@ const path = require("node:path");
         }));
         if (state.scroll > state.client + 2) errors.push(moduleName + " horizontal overflow at " + width + " px: " + JSON.stringify(state));
         if (width === 390 || width === 1440) {
-          const slug = moduleName.toLowerCase().normalize("NFD").replace(/[\\u0300-\\u036f]/g, "");
+          const slug = ({ "Vendas": "vendas", "Estoque": "estoque", "Clientes": "clientes", "Prospecção": "prospeccao", "Relatórios": "relatorios" })[moduleName];
           await page.screenshot({ path: path.join(out, slug + "-" + width + ".png"), fullPage: true, animations: "disabled" });
         }
       }
@@ -120,7 +120,7 @@ const path = require("node:path");
       await page.locator(".sidebar").getByRole("button", { name: item, exact: true }).click();
       assert.equal((await page.locator("h1").innerText()).trim(), item === "Vendas" ? "Registrar venda" : item);
       if (item !== "Dashboard" && item !== "Vendas" && item !== "Estoque") {
-        await page.screenshot({ path: path.join(out, item.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "") + "-1440.png"), fullPage: true, animations: "disabled" });
+        await page.screenshot({ path: path.join(out, ({ "Clientes": "clientes", "Prospecção": "prospeccao", "Relatórios": "relatorios" })[item] + "-1440.png"), fullPage: true, animations: "disabled" });
       }
     }
     notes.push("All six modules navigate: pass");
