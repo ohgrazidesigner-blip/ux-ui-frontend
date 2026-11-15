@@ -39,7 +39,7 @@ References: [Cambridge English — find a centre](https://www.cambridgeenglish.o
 
 No JavaScript framework or backend is used.
 
-## Run it
+## Run locally
 
 ```bash
 python3 -m http.server 8080 --directory cultura-inglesa
