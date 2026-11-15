@@ -134,7 +134,8 @@ export default function App() {
     const sidebar = document.getElementById("main-menu");
     const oldOverflow = document.body.style.overflow;
     document.body.style.overflow = "hidden";
-    sidebar?.querySelector(".nav-item")?.focus();
+    // The drawer becomes visible on the next frame; focus it only after CSS visibility changes.
+    const focusFrame = requestAnimationFrame(() => sidebar?.querySelector(".nav-item")?.focus());
     const onKey = (event) => {
       if (event.key === "Escape") { event.preventDefault(); setMobileOpen(false); return; }
       if (event.key !== "Tab" || !sidebar) return;
@@ -147,6 +148,7 @@ export default function App() {
     };
     document.addEventListener("keydown", onKey);
     return () => {
+      cancelAnimationFrame(focusFrame);
       document.removeEventListener("keydown", onKey);
       document.body.style.overflow = oldOverflow;
     };
