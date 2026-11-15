@@ -15,7 +15,7 @@ const moreItems = [
   ["Configurações", "Políticas e permissões"]
 ];
 
-function MobileContext() {
+export function MobileContext() {
   return <div className="mobile-active-context">
     <strong>Alfa Comércio · Salvador</strong><span>Jul/2026</span>
   </div>;
