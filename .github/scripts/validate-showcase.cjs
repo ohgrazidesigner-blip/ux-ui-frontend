@@ -41,6 +41,7 @@ const path = require("node:path");
         await preview.locator('button[data-view="desktop"]').click();
         await page.waitForFunction(selector=>document.querySelector(selector)?.naturalWidth===1440,"#"+name+" .preview-frame img");
       }
+      await page.evaluate(() => window.scrollTo(0, 0));
       await page.screenshot({path:path.join(out,"showcase-"+width+".png"),fullPage:true,animations:"disabled"});
       const axe=await new AxeBuilder({page}).withTags(["wcag2a","wcag2aa","wcag21a","wcag21aa"]).analyze();
       fs.writeFileSync(path.join(out,"axe-"+width+".json"),JSON.stringify({violations:axe.violations,incomplete:axe.incomplete},null,2));
@@ -48,7 +49,7 @@ const path = require("node:path");
       if(serious.length)failures.push("WCAG Axe "+width+": "+serious.map(x=>x.id+" "+x.nodes.length).join(", "));
       console.log("Showcase viewport "+width+": "+dims.client+"px, validated 6 screenshots, axe violations "+axe.violations.length);
     }
-    const info=await page.locator(".project-links a").evaluateAll(links=>links.map(el=>({href:el.getAttribute("href"),text:el.textContent?.trim(),rel:el.getAttribute("rel")})));
+    const info=await page.locator(".project-links a").evaluateAll(links=>links.map(el=>({href:el.getAttribute("href"),text:el.textContent?.trim(),rel:el.getAttribute("rel"),target:el.getAttribute("target")})));
     assert.equal(info.length,9);
     for(const link of info){
       assert(link.href&&link.href.trim().length>1);
