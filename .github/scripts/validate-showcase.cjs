@@ -44,7 +44,16 @@ const path = require("node:path");
       await page.evaluate(() => window.scrollTo(0, 0));
       await page.screenshot({path:path.join(out,"showcase-"+width+".png"),fullPage:true,animations:"disabled"});
       const axe=await new AxeBuilder({page}).withTags(["wcag2a","wcag2aa","wcag21a","wcag21aa"]).analyze();
-      fs.writeFileSync(path.join(out,"axe-"+width+".json"),JSON.stringify({violations:axe.violations,incomplete:axe.incomplete},null,2));
+      fs.writeFileSync(path.join(out,"axe-"+width+".json"),JSON.stringify({
+        checkedAt: new Date().toISOString(),
+        url: page.url(),
+        viewport: await page.evaluate(() => ({ width: innerWidth, height: innerHeight })),
+        rules: ["wcag2a","wcag2aa","wcag21a","wcag21aa"],
+        summary: { passes: axe.passes.length, violations: axe.violations.length, incomplete: axe.incomplete.length, inapplicable: axe.inapplicable.length },
+        violations: axe.violations.map(({id,impact,help,nodes}) => ({id,impact,help,nodes:nodes.map(({target,failureSummary}) => ({target,failureSummary}))})),
+        incomplete: axe.incomplete.map(({id,impact,nodes}) => ({id,impact,nodes:nodes.map(({target}) => ({target}))})),
+        passedRules: axe.passes.map(x => x.id)
+      },null,2));
       const serious=axe.violations.filter(x=>x.impact==="serious"||x.impact==="critical");
       if(serious.length)failures.push("WCAG Axe "+width+": "+serious.map(x=>x.id+" "+x.nodes.length).join(", "));
       console.log("Showcase viewport "+width+": "+dims.client+"px, validated 6 screenshots, axe violations "+axe.violations.length);
