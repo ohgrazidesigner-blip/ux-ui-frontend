@@ -17,3 +17,6 @@
 
 /* Contain intrinsically wide accounting tables within tablet-width dashboards. */
 @media(min-width:651px) and (max-width:900px){.main-shell{width:100%;max-width:100%;min-width:0}.content{min-width:0;max-width:100%}.table-panel{min-width:0;overflow:hidden}.table-scroll{max-width:100%;width:100%;overflow-x:auto}}
+
+/* Constrain seven-column desktop sample at 768 px without horizontal page scrolling. */
+@media(min-width:651px) and (max-width:900px){.company-table{min-width:0;width:100%;table-layout:fixed;white-space:normal}.company-table th,.company-table td{white-space:normal;overflow-wrap:anywhere;padding:10px 6px}}
