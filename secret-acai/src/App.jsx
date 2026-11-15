@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Modules from "./Modules.jsx";
 
 const navigation = ["Dashboard", "Vendas", "Estoque", "Clientes", "Prospecção", "Relatórios"];
@@ -29,7 +29,8 @@ function Sidebar({ active, onNavigate, mobileOpen, onClose }) {
   return (
     <>
       {mobileOpen && <button className="drawer-backdrop" aria-label="Fechar menu" onClick={onClose} />}
-      <aside className={`sidebar${mobileOpen ? " sidebar--open" : ""}`} id="main-menu" aria-label="Navegação principal">
+      <aside className={`sidebar${mobileOpen ? " sidebar--open" : ""}`} id="main-menu"
+        aria-label="Navegação principal" role={mobileOpen ? "dialog" : undefined} aria-modal={mobileOpen ? "true" : undefined}>
         <div className="brand"><span className="brand-mark" aria-hidden="true" /> <span>Secret Açaí</span></div>
         <nav aria-label="Seções da plataforma">
           {navigation.map((item) => (
@@ -63,7 +64,7 @@ function SalesChart({ period }) {
         <div className="chart-guides" aria-hidden="true"><i /><i /><i /><i /></div>
         {values.map((height, index) => (
           <div className="bar-column" key={`${period}-${index}`} aria-hidden="true">
-            <div className={`bar${(index + (period === 7 ? 5 : 0)) % 2 === 0 ? "" : " bar--dark"}`} style={{ height: `${height}%` }} />
+            <div className={`bar${[2, 6, 8, 10].includes(index + (period === 7 ? 5 : 0)) ? " bar--dark" : ""}`} style={{ height: `${height}%` }} />
             <span>{String(period === 7 ? index + 6 : index + 1).padStart(2, "0")}</span>
           </div>
         ))}
@@ -85,11 +86,11 @@ function DetailPanel({ title, id, children, onViewAll }) {
   );
 }
 
-function Dashboard({ period, onPeriodChange, onSaleClick, onMenuClick, onNavigate }) {
+function Dashboard({ period, onPeriodChange, onSaleClick, onMenuClick, onNavigate, mobileOpen }) {
   return (
     <main id="conteudo" className="main-content">
       <header className="topbar">
-        <div className="title-block"><button type="button" className="mobile-menu-button" onClick={onMenuClick} aria-controls="main-menu" aria-label="Abrir menu de navegação">Menu</button><h1>Dashboard</h1><p>Visão geral da operação e relacionamento com clientes</p></div>
+        <div className="title-block"><button type="button" className="mobile-menu-button" onClick={onMenuClick} aria-controls="main-menu" aria-label="Menu de navegação — abrir" aria-expanded={mobileOpen}>Menu</button><h1>Dashboard</h1><p>Visão geral da operação e relacionamento com clientes</p></div>
         <div className="topbar-actions">
           <label className="period-select"><span className="filter-dot" aria-hidden="true" /><span className="sr-only">Período do gráfico</span>
             <select value={period} onChange={(e) => onPeriodChange(Number(e.target.value))}><option value={30}>Ago 2026</option><option value={7}>7 dias</option></select>
@@ -119,15 +120,47 @@ export default function App() {
   const [active, setActive] = useState("Dashboard");
   const [period, setPeriod] = useState(30);
   const [mobileOpen, setMobileOpen] = useState(false);
-  useEffect(() => { const onKey = (event) => { if (event.key === "Escape") setMobileOpen(false); }; window.addEventListener("keydown", onKey); return () => window.removeEventListener("keydown", onKey); }, []);
+  const mobileMenuWasOpen = useRef(false);
+  useEffect(() => {
+    if (!mobileOpen) {
+      if (mobileMenuWasOpen.current) {
+        const opener = document.querySelector(".mobile-menu-button");
+        if (opener && getComputedStyle(opener).display !== "none") opener.focus({ preventScroll: true });
+      }
+      mobileMenuWasOpen.current = false;
+      return;
+    }
+    mobileMenuWasOpen.current = true;
+    const sidebar = document.getElementById("main-menu");
+    const oldOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    // The drawer becomes visible on the next frame; focus it only after CSS visibility changes.
+    const focusTimer = window.setTimeout(() => sidebar?.querySelector(".nav-item")?.focus({ preventScroll: true }), 240);
+    const onKey = (event) => {
+      if (event.key === "Escape") { event.preventDefault(); setMobileOpen(false); return; }
+      if (event.key !== "Tab" || !sidebar) return;
+      const options = Array.from(sidebar.querySelectorAll("button:not([disabled])"));
+      if (!options.length) return;
+      const first = options[0];
+      const last = options[options.length - 1];
+      if (event.shiftKey && document.activeElement === first) { event.preventDefault(); last.focus(); }
+      else if (!event.shiftKey && document.activeElement === last) { event.preventDefault(); first.focus(); }
+    };
+    document.addEventListener("keydown", onKey);
+    return () => {
+      window.clearTimeout(focusTimer);
+      document.removeEventListener("keydown", onKey);
+      document.body.style.overflow = oldOverflow;
+    };
+  }, [mobileOpen]);
   return (
     <div className="app-shell">
       <a href="#conteudo" className="skip-link">Pular para o conteúdo</a>
       <Sidebar active={active} onNavigate={setActive} mobileOpen={mobileOpen} onClose={() => setMobileOpen(false)} />
       {active === "Dashboard" ? (
-        <Dashboard period={period} onPeriodChange={setPeriod} onSaleClick={() => setActive("Vendas")} onMenuClick={() => setMobileOpen(true)} onNavigate={setActive} />
+        <Dashboard period={period} onPeriodChange={setPeriod} onSaleClick={() => setActive("Vendas")} onMenuClick={() => setMobileOpen(true)} onNavigate={setActive} mobileOpen={mobileOpen} />
       ) : (
-        <Modules active={active} onMenuClick={() => setMobileOpen(true)} onNavigate={setActive} />
+        <Modules active={active} onMenuClick={() => setMobileOpen(true)} onNavigate={setActive} mobileOpen={mobileOpen} />
       )}
     </div>
   );
