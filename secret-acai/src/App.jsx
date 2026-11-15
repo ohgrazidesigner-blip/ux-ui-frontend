@@ -64,7 +64,7 @@ function SalesChart({ period }) {
         <div className="chart-guides" aria-hidden="true"><i /><i /><i /><i /></div>
         {values.map((height, index) => (
           <div className="bar-column" key={`${period}-${index}`} aria-hidden="true">
-            <div className={`bar${(index + (period === 7 ? 5 : 0)) % 2 === 0 ? "" : " bar--dark"}`} style={{ height: `${height}%` }} />
+            <div className={`bar${[2, 6, 8, 10].includes(index + (period === 7 ? 5 : 0)) ? " bar--dark" : ""}`} style={{ height: `${height}%` }} />
             <span>{String(period === 7 ? index + 6 : index + 1).padStart(2, "0")}</span>
           </div>
         ))}
