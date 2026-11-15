@@ -184,7 +184,7 @@ export default function App() {
       <div className="main-shell">
         <header className="topbar">
           <button type="button" className="menu-toggle" onClick={() => setMenuOpen(true)} aria-controls="ledger-main-menu" aria-expanded={menuOpen} aria-label="Abrir menu">☰</button>
-          <span className="topbar-mobile-brand" aria-label="LedgerFlow"><img src={brandMark} alt="" width="24" height="21"/></span><span className="topbar-title">{page}</span>
+          <span className="topbar-mobile-brand" role="img" aria-label="LedgerFlow"><img src={brandMark} alt="" width="24" height="21"/></span><span className="topbar-title">{page}</span>
           <div className="topbar-period"><span>Competência</span><span className="period-selector">Jul/2026</span></div>
           <div className="topbar-search"><label htmlFor="global-search" className="sr-only">Buscar empresa, CNPJ ou documento</label><input id="global-search" type="search" value={query} onChange={(e) => setQuery(e.target.value)} placeholder="Buscar empresa, CNPJ ou documento..." /></div>
           <div className="topbar-profile"><span className="avatar" aria-hidden="true">JC</span><span><strong>Juliana Costa</strong><small>Analista contábil</small></span></div>
