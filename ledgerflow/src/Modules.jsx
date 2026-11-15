@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import "./modules.css";
 
 const statusData = [
@@ -56,7 +56,7 @@ function Action({children,onClick,primary=false,disabled=false}){return <button 
 function TextButton({children,onClick}){return <button type="button" className="lf-text-button" onClick={onClick}>{children}</button>;}
 function Banner({title,children,tone="blue"}){return <div className={"lf-banner lf-banner-"+tone}>{title&&<strong>{title}</strong>}{children&&<p>{children}</p>}</div>;}
 function Context(){return <div className="lf-context"><small>EMPRESA ATIVA</small><strong>Alfa Comércio Ltda. · Filial Salvador</strong><span>CNPJ 12.345.678/0002-70 · Empresa 0104-02 · Competência Jul/2026</span></div>;}
-function DataTable({headers,rows}){return <div className="lf-scroll"><table className="lf-table"><thead><tr>{headers.map(h=><th key={h}>{h}</th>)}</tr></thead><tbody>{rows.map((cols,i)=><tr key={i}>{cols.map((c,j)=><td key={j}>{c}</td>)}</tr>)}</tbody></table></div>;}
+function DataTable({headers,rows}){return <div className="lf-scroll"><table className="lf-table"><thead><tr>{headers.map(h=><th scope="col" key={h}>{h}</th>)}</tr></thead><tbody>{rows.map((cols,i)=><tr key={i}>{cols.map((c,j)=><td key={j}>{c}</td>)}</tr>)}</tbody></table></div>;}
 function RowPair({label,value}){return <div className="lf-pair"><span>{label}</span><strong>{value}</strong></div>;}
 function Companies({search,go}){const [filters,setFilters]=useState(false);const [selected,setSelected]=useState(null);const [p,setP]=useState(1);const [q,setQ]=useState("");const term=(q||search||"").toLowerCase();const rows=statusData.filter(r=>r.join(" ").toLowerCase().includes(term));return <>
  <Heading title="Empresas" subtitle="Gerencie empresas e filiais sem perder o contexto de competência, responsável e fechamento."/>
