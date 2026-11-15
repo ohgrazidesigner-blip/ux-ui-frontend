@@ -70,7 +70,7 @@ const path = require("node:path");
     assert.equal(await page.locator(".nav-item").last().evaluate(el => document.activeElement === el), true);
     await page.keyboard.press("Escape");
     await page.waitForFunction(() => document.activeElement === document.querySelector(".mobile-menu-button"));
-    assert.equal(await page.locator(".sidebar").evaluate(el => getComputedStyle(el).visibility), "hidden");
+    await page.waitForFunction(() => getComputedStyle(document.querySelector(".sidebar")).visibility === "hidden");
     notes.push("Mobile drawer focus trap, ARIA and Escape: pass");
 
     await page.setViewportSize({ width: 1440, height: 900 });
