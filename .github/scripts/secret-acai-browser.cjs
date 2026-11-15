@@ -54,7 +54,7 @@ const path = require("node:path");
     assert.equal(await page.locator("#main-menu").getAttribute("role"), "dialog");
     assert.equal(await menuTrigger.getAttribute("aria-expanded"), "true");
     try {
-      await page.waitForFunction(() => document.activeElement === document.querySelector("#main-menu .nav-item"), { timeout: 5000 });
+      await page.waitForFunction(() => document.activeElement === document.querySelector("#main-menu .nav-item"), null, { timeout: 5000 });
     } catch {
       const diagnostic = await page.evaluate(() => ({
         active: document.activeElement?.outerHTML.slice(0,200),
