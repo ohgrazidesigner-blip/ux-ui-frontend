@@ -53,7 +53,18 @@ const path = require("node:path");
     await menuTrigger.click();
     assert.equal(await page.locator("#main-menu").getAttribute("role"), "dialog");
     assert.equal(await menuTrigger.getAttribute("aria-expanded"), "true");
-    await page.waitForFunction(() => document.activeElement === document.querySelector("#main-menu .nav-item"));
+    try {
+      await page.waitForFunction(() => document.activeElement === document.querySelector("#main-menu .nav-item"), { timeout: 5000 });
+    } catch {
+      const diagnostic = await page.evaluate(() => ({
+        active: document.activeElement?.outerHTML.slice(0,200),
+        first: document.querySelector("#main-menu .nav-item")?.outerHTML.slice(0,200),
+        sidebarClass: document.getElementById("main-menu")?.className,
+        sidebarVisibility: getComputedStyle(document.getElementById("main-menu")).visibility,
+        firstVisibility: getComputedStyle(document.querySelector("#main-menu .nav-item")).visibility
+      }));
+      throw new Error("Mobile drawer focus never entered first item: " + JSON.stringify(diagnostic));
+    }
     await page.keyboard.press("Shift+Tab");
     assert.equal(await page.locator(".nav-item").last().evaluate(el => document.activeElement === el), true);
     await page.keyboard.press("Escape");
