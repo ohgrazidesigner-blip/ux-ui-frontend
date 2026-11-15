@@ -1,7 +1,9 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import brandMark from "./assets/ledgerflow-mark.svg";
 import "./styles.css";
 import Modules from "./Modules.jsx";
+import { MobileOverview, MobileMore } from "./MobileViews.jsx";
+import MobileModule from "./MobileModules.jsx";
 
 const FIGMA_URL = "https://www.figma.com/design/79LeQIZXXjuWcoDleD5Pf2?node-id=287-10";
 const navItems = [
@@ -55,12 +57,68 @@ function CompanyTable({ rows, onOpen }) {
     </div>
   );
 }
+function DetailDrawer({ company, onClose }) {
+  const dialogRef = useRef(null);
+  const onCloseRef = useRef(onClose);
+  onCloseRef.current = onClose;
+  useEffect(() => {
+    const previous = document.activeElement;
+    const oldOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    dialogRef.current?.focus({ preventScroll: true });
+    const keyDown = event => {
+      if (event.key === "Escape") {
+        event.preventDefault();
+        event.stopPropagation();
+        onCloseRef.current();
+      }
+      if (event.key !== "Tab" || !dialogRef.current) return;
+      const focusable = [...dialogRef.current.querySelectorAll(
+        'button:not([disabled]), a[href], input:not([disabled]), select:not([disabled]), textarea:not([disabled])'
+      )].filter(el => el.getClientRects().length > 0);
+      if (!focusable.length) { event.preventDefault(); dialogRef.current.focus(); return; }
+      const first = focusable[0], last = focusable[focusable.length-1];
+      if (event.shiftKey && (document.activeElement === first || document.activeElement === dialogRef.current)) {
+        event.preventDefault(); last.focus();
+      } else if (!event.shiftKey && (document.activeElement === last || document.activeElement === dialogRef.current)) {
+        event.preventDefault(); first.focus();
+      }
+    };
+    document.addEventListener("keydown", keyDown, true);
+    return () => {
+      document.removeEventListener("keydown", keyDown, true);
+      document.body.style.overflow = oldOverflow;
+      if (previous instanceof HTMLElement && previous.isConnected) previous.focus({ preventScroll:true });
+    };
+  }, []);
+  return (
+    <div className="modal-backdrop" onMouseDown={event=>{if(event.target===event.currentTarget)onCloseRef.current();}}>
+      <section ref={dialogRef} tabIndex={-1} className="detail-dialog" role="dialog" aria-modal="true" aria-labelledby="detail-title">
+        <header><div><p className="module-eyebrow">DETALHES · CARTEIRA</p><h2 id="detail-title">{company.name}</h2></div><button type="button" className="close-dialog" onClick={()=>onCloseRef.current()} aria-label="Fechar detalhes">×</button></header>
+        <dl className="detail-list">
+          <div><dt>Situação</dt><dd>{company.status}</dd></div>
+          <div><dt>Bloqueios</dt><dd>{company.blockers}</dd></div>
+          <div><dt>Prazo</dt><dd>{company.due}</dd></div>
+          <div><dt>Responsável</dt><dd>{company.owner}</dd></div>
+          <div><dt>Risco</dt><dd><Pill risk={company.risk}/></dd></div>
+        </dl>
+        <p className="detail-note">Dados ilustrativos do protótipo Figma. Nenhuma ação contábil real é executada.</p>
+        <button type="button" className="primary-button" onClick={()=>onCloseRef.current()}>Concluir consulta</button>
+      </section>
+    </div>
+  );
+}
+
 export default function App() {
   const [page, setPage] = useState("Visão Geral");
   const [query, setQuery] = useState("");
   const [scope, setScope] = useState("all");
   const [selected, setSelected] = useState(null);
   const [menuOpen, setMenuOpen] = useState(false);
+  const menuPreviouslyOpen = useRef(false);
+  const [mobileExpanded,setMobileExpanded] = useState(false);
+  const [mobileInitialView,setMobileInitialView] = useState(null);
+  const mobileSpecial = ["Empresas","Importações","Fiscal","Pendências","Relatórios"].includes(page);
   const visibleCompanies = useMemo(() => {
     const term = query.trim().toLocaleLowerCase("pt-BR");
     return companies.filter((company) =>
@@ -69,22 +127,44 @@ export default function App() {
     );
   }, [query, scope]);
   useEffect(() => {
-    const onEscape = (event) => {
-      if (event.key === "Escape") { setSelected(null); setMenuOpen(false); }
+    if (!menuOpen) {
+      if (menuPreviouslyOpen.current) {
+        const opener = document.querySelector(".menu-toggle");
+        if (opener && getComputedStyle(opener).display !== "none") opener.focus({ preventScroll:true });
+      }
+      menuPreviouslyOpen.current = false;
+      return;
+    }
+    menuPreviouslyOpen.current = true;
+    const sidebar = document.getElementById("ledger-main-menu");
+    const before = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    // CSS transitions the drawer into view; focus after it is visible.
+    const focusTimer = window.setTimeout(() => sidebar?.querySelector(".nav-item")?.focus({ preventScroll:true }), 230);
+    const onKey = event => {
+      if (event.key === "Escape") { event.preventDefault(); setMenuOpen(false); return; }
+      if (event.key !== "Tab" || !sidebar) return;
+      const elements = Array.from(sidebar.querySelectorAll("button:not([disabled])"));
+      if (!elements.length) return;
+      const first=elements[0],last=elements[elements.length-1];
+      if (event.shiftKey && document.activeElement===first) { event.preventDefault(); last.focus(); }
+      else if (!event.shiftKey && document.activeElement===last) { event.preventDefault(); first.focus(); }
     };
-    document.addEventListener("keydown", onEscape);
-    return () => document.removeEventListener("keydown", onEscape);
-  }, []);
+    document.addEventListener("keydown", onKey);
+    return () => { window.clearTimeout(focusTimer); document.removeEventListener("keydown", onKey); document.body.style.overflow=before; };
+  }, [menuOpen]);
   const navigate = (item) => {
     setPage(item);
     setQuery("");
+    setMobileExpanded(false);
+    setMobileInitialView(null);
     setMenuOpen(false);
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
   return (
     <div className="app">
       {menuOpen && <button className="sidebar-scrim" aria-label="Fechar menu" onClick={() => setMenuOpen(false)} />}
-      <aside className={"sidebar" + (menuOpen ? " sidebar-open" : "")} aria-label="Menu principal">
+      <aside id="ledger-main-menu" className={"sidebar" + (menuOpen ? " sidebar-open" : "")} aria-label="Menu principal" role={menuOpen ? "dialog" : undefined} aria-modal={menuOpen ? "true" : undefined}>
         <div className="sidebar-brand"><Logo /></div>
         <nav className="navigation" aria-label="Navegação LedgerFlow">
           {navItems.map((item) => (
@@ -103,8 +183,8 @@ export default function App() {
       </aside>
       <div className="main-shell">
         <header className="topbar">
-          <button className="menu-toggle" onClick={() => setMenuOpen(true)} aria-label="Abrir menu">☰</button>
-          <span className="topbar-title">{page}</span>
+          <button type="button" className="menu-toggle" onClick={() => setMenuOpen(true)} aria-controls="ledger-main-menu" aria-expanded={menuOpen} aria-label="Abrir menu">☰</button>
+          <span className="topbar-mobile-brand" role="img" aria-label="LedgerFlow"><img src={brandMark} alt="" width="24" height="21"/></span><span className="topbar-title">{page}</span>
           <div className="topbar-period"><span>Competência</span><span className="period-selector">Jul/2026</span></div>
           <div className="topbar-search"><label htmlFor="global-search" className="sr-only">Buscar empresa, CNPJ ou documento</label><input id="global-search" type="search" value={query} onChange={(e) => setQuery(e.target.value)} placeholder="Buscar empresa, CNPJ ou documento..." /></div>
           <div className="topbar-profile"><span className="avatar" aria-hidden="true">JC</span><span><strong>Juliana Costa</strong><small>Analista contábil</small></span></div>
@@ -112,6 +192,8 @@ export default function App() {
         <main className="content" id="conteudo-principal">
           {page === "Visão Geral" ? (
             <>
+              <MobileOverview onNavigate={navigate}/>
+              <div className="ledger-desktop-overview">
               <div className="dashboard-head">
                 <div><h1>Bom dia, Juliana</h1><p>Acompanhe o fechamento das empresas na competência Jul/2026.</p></div>
                 <div className="my-tasks"><div><small>Minhas Pendências</small><strong>23</strong></div><button className="link-button" onClick={() => setScope(scope === "all" ? "mine" : "all")}>Exibir: {scope === "all" ? "Todas as empresas" : "Minhas empresas"}</button></div>
@@ -122,29 +204,24 @@ export default function App() {
                 <CompanyTable rows={visibleCompanies} onOpen={setSelected} />
                 <p className="table-footnote">Atenção: risco considera prazo, bloqueios e impacto no fechamento.</p>
               </section>
+              </div>
             </>
+          ) : page === "Mais" ? (
+            <MobileMore onNavigate={navigate}/>
           ) : (
-            <Modules page={page} onNavigate={navigate} search={query} />
+            <>
+              {mobileSpecial&&<div className={"ledger-mobile-module-summary"+(mobileExpanded?" is-collapsed":"")}>
+                <MobileModule page={page} onNavigate={navigate} onExpand={view=>{setMobileInitialView(view||null);setMobileExpanded(true);}}/>
+              </div>}
+              <div className={"ledger-full-module"+(mobileSpecial&&!mobileExpanded?" is-collapsed":"")}>
+                <Modules key={page+":"+(mobileInitialView||"index")} page={page} onNavigate={navigate} search={query} initialView={mobileInitialView}/>
+              </div>
+            </>
           )}
         </main>
       </div>
-      <nav className="mobile-bottom-nav" aria-label="Navegação móvel">{["Visão Geral","Pendências","Obrigações","Empresas"].map(item=><button key={item} onClick={()=>navigate(item)} className={page===item?"mobile-active":""}>{item==="Visão Geral"?"Início":item==="Empresas"?"Mais":item}</button>)}</nav>
-      {selected && (
-        <div className="modal-backdrop" onMouseDown={(e) => { if (e.target === e.currentTarget) setSelected(null); }}>
-          <section className="detail-dialog" role="dialog" aria-modal="true" aria-labelledby="detail-title">
-            <header><div><p className="module-eyebrow">DETALHES · CARTEIRA</p><h2 id="detail-title">{selected.name}</h2></div><button className="close-dialog" onClick={() => setSelected(null)} aria-label="Fechar detalhes">×</button></header>
-            <dl className="detail-list">
-              <div><dt>Situação</dt><dd>{selected.status}</dd></div>
-              <div><dt>Bloqueios</dt><dd>{selected.blockers}</dd></div>
-              <div><dt>Prazo</dt><dd>{selected.due}</dd></div>
-              <div><dt>Responsável</dt><dd>{selected.owner}</dd></div>
-              <div><dt>Risco</dt><dd><Pill risk={selected.risk} /></dd></div>
-            </dl>
-            <p className="detail-note">Dados ilustrativos do protótipo Figma. Nenhuma ação contábil real é executada.</p>
-            <button className="primary-button" onClick={() => setSelected(null)}>Concluir consulta</button>
-          </section>
-        </div>
-      )}
+      <nav className="mobile-bottom-nav" aria-label="Navegação móvel">{["Visão Geral","Pendências","Obrigações","Mais"].map(item=><button type="button" key={item} onClick={()=>navigate(item)} aria-current={(item==="Mais"?!["Visão Geral","Pendências","Obrigações"].includes(page):page===item)?"page":undefined} className={(item==="Mais"?!["Visão Geral","Pendências","Obrigações"].includes(page):page===item)?"mobile-active":""}>{item==="Visão Geral"?"Início":item}</button>)}</nav>
+      {selected && <DetailDrawer company={selected} onClose={()=>setSelected(null)} />}
     </div>
   );
 }

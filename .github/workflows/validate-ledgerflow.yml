@@ -1,0 +1,49 @@
+name: Audit LedgerFlow Front-End
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'ledgerflow/**'
+      - '.github/scripts/ledgerflow-browser.cjs'
+      - '.github/workflows/validate-ledgerflow.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  browser-audit:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Node 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Build all existing React projects
+        run: |
+          npm --prefix ledgerflow install --no-audit --no-fund
+          npm --prefix ledgerflow run build
+          npm --prefix secret-acai install --no-audit --no-fund
+          npm --prefix secret-acai run build
+      - name: Install Playwright and axe
+        run: |
+          npm install --no-save --no-package-lock --no-audit --no-fund playwright @axe-core/playwright
+          npx playwright install --with-deps chromium
+      - name: Browser audits of Figma screens and simulated workflows
+        shell: bash
+        run: |
+          npm --prefix ledgerflow run preview -- --host 127.0.0.1 --port 8767 --strictPort > /tmp/ledger-preview.log 2>&1 &
+          server_pid=$!
+          trap 'kill "$server_pid" || true' EXIT
+          node .github/scripts/ledgerflow-browser.cjs
+      - name: Upload screenshots and accessibility report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ledgerflow-audit
+          path: ledger-audit-artifacts/
+          if-no-files-found: ignore
+          retention-days: 14
