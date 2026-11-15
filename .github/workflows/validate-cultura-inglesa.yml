@@ -7,6 +7,7 @@ on:
       - 'cultura-inglesa/**'
       - '.github/workflows/deploy-secret-acai-pages.yml'
       - '.github/workflows/validate-cultura-inglesa.yml'
+      - '.github/scripts/cultura-browser.cjs'
   workflow_dispatch:
 
 permissions:
@@ -52,3 +53,22 @@ jobs:
           npm --prefix secret-acai run build
           npm --prefix ledgerflow install --no-audit --no-fund
           npm --prefix ledgerflow run build
+      - name: Install browser test dependencies
+        run: |
+          npm install --no-save --no-package-lock --no-audit --no-fund playwright @axe-core/playwright
+          npx playwright install --with-deps chromium
+      - name: Run browser interaction, responsive layout and axe checks
+        shell: bash
+        run: |
+          python3 -m http.server 8765 --bind 127.0.0.1 --directory cultura-inglesa > /tmp/cultura-server.log 2>&1 &
+          server_pid=$!
+          trap 'kill "$server_pid" || true' EXIT
+          node .github/scripts/cultura-browser.cjs
+      - name: Attach audit screenshots and axe report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: cultura-inglesa-audit
+          path: audit-artifacts/
+          if-no-files-found: ignore
+          retention-days: 7
