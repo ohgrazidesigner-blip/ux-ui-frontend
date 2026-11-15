@@ -26,7 +26,7 @@ I used React state with `localStorage` for the records that change. They persist
 
 The sales confirmation shows stock impact before changing the local record. The discount step represents a business rule in the interface; it does **not** request real managerial approval.
 
-## Run it locally
+## Run locally
 
 ```bash
 cd secret-acai
