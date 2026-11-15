@@ -25,6 +25,8 @@ Styles and content are modeled on the 2026 design reference. Smaller viewports u
 
 **This is not the real Secret Açaí production platform.** The original Figma values (including revenues, order numbers, customer names and stock levels) are **illustrative design data**, not verified live business data. New entries, stock movements, leads and simulated sales persist only in the current browser's local storage. They do not reach a server and are not shared between devices.
 
+The **Dashboard KPIs, charts and monthly report figures are a fixed August 2026 design snapshot** matching the Figma, not calculations from newly entered demo transactions. Sales and inventory records **do** update the corresponding front-end module and are persisted in this browser, but they do not recalculate the historical dashboard or report cards. This boundary avoids presenting sample metrics as real-time business performance.
+
 Login, managerial approval, WhatsApp contact numbers, PDF generation on a server, historical analytics, access-control policies and Supabase/Postgres/RLS/RPC services described in the technical design **are not connected**. The application does not claim to process real payments or commercial transactions.
 
 ## Tech stack
