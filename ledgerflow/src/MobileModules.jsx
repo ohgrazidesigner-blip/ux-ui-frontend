@@ -87,7 +87,7 @@ function Pending({onExpand,onNavigate}) {
     <div className="lfm-stack">{items.map(([name,description,impact,status,tone,destination],i)=><article className="lfm-pending" key={name+i}>
       <div><small>{name}</small><State label={status} tone={tone}/></div>
       <strong>{description}</strong><p>{impact}</p>
-      <button onClick={()=>destination==="Relatórios"?onExpand("fechamento"):onNavigate(destination)}>Abrir pendência</button>
+      <button onClick={()=>onNavigate(destination)}>Abrir pendência</button>
     </article>)}</div>
   </>;
 }
