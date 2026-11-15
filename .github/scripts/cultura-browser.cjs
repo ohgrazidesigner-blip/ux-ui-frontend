@@ -105,6 +105,9 @@ const assert = require('node:assert/strict');
     }, null, 2));
     const summary = axe.violations.map(v => ({ id: v.id, impact: v.impact, nodes: v.nodes.length, help: v.help }));
     logs.push('Axe WCAG A/AA automated findings: ' + JSON.stringify(summary));
+    logs.push('Axe finding details: ' + JSON.stringify(axe.violations.map(v => ({
+      id: v.id, nodes: v.nodes.map(n => ({ target: n.target, html: n.html.slice(0,250), summary: n.failureSummary }))
+    }))));
     const severe = axe.violations.filter(v => v.impact === 'critical' || v.impact === 'serious');
     if (severe.length) problems.push('Axe serious/critical violations: ' + severe.map(v => v.id + '(' + v.nodes.length + ')').join(', '));
   } finally {
