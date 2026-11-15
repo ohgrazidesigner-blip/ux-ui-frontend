@@ -251,7 +251,7 @@ export default function Modules({ active, onMenuClick, onNavigate, mobileOpen })
           <div className="m-warning"><strong>Atenção</strong><span>Ao confirmar, {quantity} caixas de {size} {flavor} serão baixadas do estoque.</span></div>
           {formError && <p className="m-error" role="alert">{formError}</p>}
         </div>
-        <aside className="panel m-sale-summary"><h2>Resumo do pedido</h2><p className="m-purple">{selectedClient || "Selecione um cliente"} · {size} · {flavor}</p>
+        <aside className="panel m-sale-summary"><h2>Resumo do pedido</h2><p className="m-purple">Açaí {size} · {flavor}</p>
           <div className="m-summary-line"><span>Quantidade</span><strong>{quantity} caixas</strong></div>
           <div className="m-summary-line"><span>Preço unitário</span><strong>{currency(finalPrice)}</strong></div>
           <div className="m-summary-line"><span>Subtotal</span><strong>{currency(subtotal)}</strong></div>
