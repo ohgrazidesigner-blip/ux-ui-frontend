@@ -30,6 +30,20 @@ const path = require("node:path");
       if (dims.scroll > dims.client + 2) errors.push("Horizontal overflow at " + width + " px: " + JSON.stringify(dims));
       await page.screenshot({ path: path.join(out, "dashboard-" + width + ".png"), fullPage: true, animations: "disabled" });
       notes.push("Dashboard viewport " + width + ": " + dims.scroll + "/" + dims.client);
+      for (const moduleName of ["Vendas", "Estoque", "Clientes", "Prospecção", "Relatórios"]) {
+        if (width <= 760) await page.locator(".mobile-menu-button").click();
+        await page.locator(".sidebar").getByRole("button", { name: moduleName, exact: true }).click();
+        const state = await page.evaluate(() => ({
+          scroll: document.documentElement.scrollWidth,
+          client: document.documentElement.clientWidth
+        }));
+        if (state.scroll > state.client + 2) errors.push(moduleName + " horizontal overflow at " + width + " px: " + JSON.stringify(state));
+        if (width === 390 || width === 1440) {
+          const slug = moduleName.toLowerCase().normalize("NFD").replace(/[\\u0300-\\u036f]/g, "");
+          await page.screenshot({ path: path.join(out, slug + "-" + width + ".png"), fullPage: true, animations: "disabled" });
+        }
+      }
+      notes.push("Five additional modules checked for overflow at " + width + " px");
     }
 
     await page.setViewportSize({ width: 390, height: 844 });
