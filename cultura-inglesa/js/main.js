@@ -236,12 +236,13 @@
   });
 
   // Map initialization stays separate from the rest of the page interactions.
-// Edit addresses and coordinates here. The initial data was supplied for this portfolio mockup.
+// The addresses are public references for this historical demo.
+// Coordinates are approximate markers, not verified navigation destinations.
 const LOCATIONS = [
-  { id: 'graca', name: 'Graça', address: 'Rua Plínio de Azevedo, 260', lat: -12.9985, lng: -38.5230, direction: 'top' },
-  { id: 'ondina', name: 'Ondina', address: 'Av. Oceânica, 5.949, 601', lat: -13.0085, lng: -38.5085, direction: 'bottom' },
-  { id: 'pituba', name: 'Pituba', address: 'Rua Nossa Sra. da Glória, 481', lat: -13.0040, lng: -38.4630, direction: 'right' },
-  { id: 'vilas', name: 'Vilas do Atlântico', address: 'Praia de Stela, S/N', lat: -12.8880, lng: -38.3030, direction: 'left' }
+  { id: 'graca', name: 'Graça', address: 'Rua Flórida (número divergente entre fontes)', lat: -12.9985, lng: -38.5230, direction: 'top' },
+  { id: 'ondina', name: 'Ondina', address: 'Rua Professor Sabino Silva, 601', lat: -13.0085, lng: -38.5085, direction: 'bottom' },
+  { id: 'pituba', name: 'Pituba', address: 'Rua Mato Grosso, 481', lat: -13.0040, lng: -38.4630, direction: 'right' },
+  { id: 'vilas', name: 'Vilas do Atlântico', address: 'Endereço histórico não confirmado', lat: -12.8880, lng: -38.3030, direction: 'left' }
 ];
 
 function initLocationsMap() {
