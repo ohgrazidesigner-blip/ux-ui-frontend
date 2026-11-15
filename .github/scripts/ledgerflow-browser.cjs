@@ -52,6 +52,12 @@ const assert = require("node:assert/strict");
     await page.locator(".ledger-mobile-more").getByRole("button",{name:/Importações/}).click();
     assert.equal(await page.getByRole("heading",{name:"Importações",exact:true}).first().isVisible(),true);
     notes.push("Figma M02/M17 original mobile overview and eight-destination Mais navigation: pass");
+    await page.locator(".mobile-bottom-nav").getByRole("button",{name:"Mais"}).click();
+    await page.locator(".ledger-mobile-more").getByRole("button",{name:/Relatórios/}).click();
+    assert.equal(await page.locator(".lfm-report").count(),4);
+    await page.locator(".lfm-report").getByRole("button",{name:"Abrir DRE"}).click();
+    assert.equal(await page.getByRole("heading",{name:"Demonstração do Resultado"}).isVisible(),true);
+    notes.push("Mobile Figma report cards open the detailed DRE flow: pass");
 
     await page.setViewportSize({width:768,height:900});
     await page.goto(base,{waitUntil:"domcontentloaded"});
@@ -101,6 +107,19 @@ const assert = require("node:assert/strict");
       await page.locator(".sidebar .nav-item").getByText(name,{exact:true}).click();
       const a=await new AxeBuilder({page}).withTags(["wcag2a","wcag2aa","wcag21a","wcag21aa"]).analyze();
       scans.push({module:name,violations:a.violations.map(v=>({id:v.id,impact:v.impact,nodes:v.nodes.map(n=>({target:n.target,html:n.html.slice(0,250),summary:n.failureSummary}))})),incomplete:a.incomplete.map(v=>({id:v.id,count:v.nodes.length}))});
+    }
+    // Mobile routes have their own Figma compositions: scan visible 390px views too.
+    await page.setViewportSize({width:390,height:844});
+    await page.goto(base,{waitUntil:"domcontentloaded"});
+    for (const name of ["Visão Geral","Empresas","Importações","Fiscal","Relatórios","Pendências","Mais"]) {
+      if(name==="Pendências")await page.locator(".mobile-bottom-nav").getByRole("button",{name:"Pendências"}).click();
+      else if(name==="Mais")await page.locator(".mobile-bottom-nav").getByRole("button",{name:"Mais"}).click();
+      else if(name!=="Visão Geral"){
+        await page.locator(".mobile-bottom-nav").getByRole("button",{name:"Mais"}).click();
+        await page.locator(".ledger-mobile-more").getByRole("button",{name:new RegExp("^"+name)}).click();
+      }
+      const check=await new AxeBuilder({page}).withTags(["wcag2a","wcag2aa","wcag21a","wcag21aa"]).analyze();
+      scans.push({module:"Mobile "+name,violations:check.violations.map(v=>({id:v.id,impact:v.impact,nodes:v.nodes.map(n=>({target:n.target,html:n.html.slice(0,250),summary:n.failureSummary}))})),incomplete:check.incomplete.map(v=>({id:v.id,count:v.nodes.length}))});
     }
     fs.writeFileSync(path.join(root,"axe-results.json"),JSON.stringify(scans,null,2));
     notes.push("Axe results "+JSON.stringify(scans.map(x=>({module:x.module,issues:x.violations.map(z=>({rule:z.id,impact:z.impact,count:z.nodes.length}))}))));
