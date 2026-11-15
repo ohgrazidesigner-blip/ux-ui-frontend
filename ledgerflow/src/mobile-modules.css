@@ -45,7 +45,7 @@
 .lfm-fiscal-banner strong{color:#b45309;font-size:12px}
 .lfm-fiscal-banner p{font-size:11px;color:#526174;line-height:1.45;margin:9px 0}
 .lfm-fiscal-banner button,.lfm-report button,.lfm-pending button{padding:0;background:transparent;border:0;color:#2563eb;font-size:12px;font-weight:600;text-align:left}
-.lfm-report>div,.lfm-pending>div{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.lfm-report{padding:12px}.lfm-report p{margin:6px 0}.lfm-report h2{font-size:16px}.lfm-report>div,.lfm-pending>div{display:flex;align-items:center;justify-content:space-between;gap:8px}
 .lfm-report h2{font-size:17px;margin:0}
 .lfm-report p{margin:9px 0 6px}
 .lfm-trace{margin-top:22px;padding:12px;background:#eff6ff;border-radius:9px;font-size:11px}
