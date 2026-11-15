@@ -29,7 +29,7 @@ const assert = require("node:assert/strict");
     for(const width of [390,768,1024,1536]){
       await page.setViewportSize({width,height:900});
       await page.goto(base,{waitUntil:"domcontentloaded"});
-      await page.locator("h1").first().waitFor();
+      await page.locator("h1:visible").first().waitFor();
       const items=width===390?["Visão Geral","Empresas","Importações","Conciliação","Fiscal","Relatórios","Automação","Comunicações","Configurações"]:["Visão Geral","Empresas","Importações","Conciliação","Fiscal","Relatórios","Obrigações","Pendências","Comunicações","Automação","Configurações"];
       for(const name of items) {
         if(name!=="Visão Geral")await openSection(name);
