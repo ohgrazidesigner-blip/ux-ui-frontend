@@ -40,7 +40,7 @@ const assert = require("node:assert/strict");
         }
         if(width===390||width===1536) {
           const slug=({"Visão Geral":"home","Empresas":"empresas","Importações":"importacoes","Conciliação":"conciliacao","Fiscal":"fiscal","Relatórios":"relatorios","Obrigações":"obrigacoes","Pendências":"pendencias","Comunicações":"comunicacoes","Automação":"automacao","Configurações":"configuracoes"})[name];
-          await page.screenshot({path:path.join(root,slug+"-"+width+".png"),fullPage:true,animations:"disabled"});
+          await page.mouse.move(385,886); await page.screenshot({path:path.join(root,slug+"-"+width+".png"),fullPage:true,animations:"disabled"});
         }
       }
       notes.push("Responsive modules verified at "+width+" px.");
