@@ -14,7 +14,8 @@ const assert = require('node:assert/strict');
   const problems = [];
   const logs = [];
   const base = 'http://127.0.0.1:8765/';
-  const page = await browser.newPage({ viewport: { width: 390, height: 844 }, reducedMotion: 'reduce' });
+  const context = await browser.newContext({ viewport: { width: 390, height: 844 }, reducedMotion: 'reduce' });
+  const page = await context.newPage();
   page.on('pageerror', error => problems.push('Uncaught browser JS: ' + error.message));
 
   // Untrusted third-party map tiles, fonts and CDN are excluded from deterministic smoke tests.
