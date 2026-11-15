@@ -32,7 +32,7 @@ The Figma case describes eight participants in two rounds using static design sc
 
 Company names, CNPJs, values and transaction examples are illustrative. There are no bank connections, fiscal submissions, production approvals, tenant permissions or persistent audit records.
 
-## Run it
+## Run locally
 
 ```bash
 cd ledgerflow
