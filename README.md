@@ -18,6 +18,8 @@ I start from the original interface and its content. Then I decide how its navig
 
 The code uses vanilla JavaScript for Cultura Inglesa and React/Vite for the other two systems. Browser tests and accessibility scans live under `.github/`, alongside the Pages deployment.
 
+## Local development
+
 You can run the static Cultura Inglesa project with a basic HTTP server. For either React project, run `npm install` and `npm run dev` inside its directory. Both build with `npm run build`.
 
 ## A note about the data
