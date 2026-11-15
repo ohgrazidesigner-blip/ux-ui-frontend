@@ -2,7 +2,7 @@
  * Runs against the existing static HTML; no production build or backend.
  */
 const { chromium } = require('playwright');
-const { AxeBuilder } = require('@axe-core/playwright');
+const AxeBuilder = require('@axe-core/playwright').default;
 const fs = require('node:fs');
 const path = require('node:path');
 const assert = require('node:assert/strict');
