@@ -40,6 +40,13 @@ const assert = require('node:assert/strict');
       if (values.actual > values.viewport + 2) problems.push('Horizontal overflow at ' + width + 'px: ' + JSON.stringify(values));
       await page.screenshot({ path: path.join(output, 'home-' + width + '.png'), fullPage: true, animations: 'disabled' });
       logs.push('Viewport ' + width + 'px: ' + values.actual + '/' + values.viewport + 'px');
+      if (width === 390 || width === 1440) {
+        const sectionHeights = await page.evaluate(() => {
+          const names = ['.site-header','.hero','.cursos','.prova','.lead','.teste','.novidades','.onde','.newsletter','.site-footer'];
+          return names.map(name => [name, Math.round(document.querySelector(name).getBoundingClientRect().height)]);
+        });
+        logs.push('Section heights at ' + width + 'px: ' + JSON.stringify(sectionHeights));
+      }
     }
 
     await page.setViewportSize({ width: 390, height: 844 });
