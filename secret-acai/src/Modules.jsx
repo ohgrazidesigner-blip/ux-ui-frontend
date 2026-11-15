@@ -58,13 +58,45 @@ function Metric({ label, value, helper, tone = "brand" }) {
 }
 function Modal({ title, description, children, onClose }) {
   const container = useRef(null);
+  const closeHandler = useRef(onClose);
+  closeHandler.current = onClose;
   useEffect(() => {
+    const previousFocus = document.activeElement;
+    const oldOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
     container.current?.focus();
-    const onKey = (event) => { if (event.key === "Escape") onClose(); };
-    document.addEventListener("keydown", onKey);
-    return () => document.removeEventListener("keydown", onKey);
-  }, [onClose]);
-  return <div className="dialog-backdrop" onMouseDown={(e) => { if (e.target === e.currentTarget) onClose(); }}>
+    const onKey = (event) => {
+      if (event.key === "Escape") {
+        event.preventDefault();
+        event.stopPropagation();
+        closeHandler.current();
+      }
+      if (event.key !== "Tab" || !container.current) return;
+      const elements = Array.from(container.current.querySelectorAll(
+        'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])'
+      )).filter(element => element.getClientRects().length > 0);
+      if (!elements.length) { event.preventDefault(); container.current.focus(); return; }
+      const first = elements[0];
+      const last = elements[elements.length - 1];
+      const outside = !container.current.contains(document.activeElement);
+      if (outside || (event.shiftKey && (document.activeElement === first || document.activeElement === container.current))) {
+        event.preventDefault();
+        (event.shiftKey && !outside ? last : first).focus();
+      } else if (!event.shiftKey && document.activeElement === last) {
+        event.preventDefault();
+        first.focus();
+      }
+    };
+    document.addEventListener("keydown", onKey, true);
+    return () => {
+      document.removeEventListener("keydown", onKey, true);
+      document.body.style.overflow = oldOverflow;
+      if (previousFocus instanceof HTMLElement && previousFocus.isConnected && !previousFocus.closest(".dialog-backdrop")) {
+        previousFocus.focus({ preventScroll: true });
+      }
+    };
+  }, []);
+  return <div className="dialog-backdrop" onMouseDown={(e) => { if (e.target === e.currentTarget) closeHandler.current(); }}>
     <section ref={container} tabIndex={-1} className="dialog m-dialog" role="dialog" aria-modal="true" aria-labelledby="m-modal-title">
       <div className="m-dialog-head"><div><h2 id="m-modal-title">{title}</h2>{description && <p>{description}</p>}</div>
         <button className="m-close" type="button" onClick={onClose} aria-label="Fechar janela">×</button></div>
@@ -72,9 +104,9 @@ function Modal({ title, description, children, onClose }) {
     </section>
   </div>;
 }
-function Header({ title, subtitle, onMenuClick, children }) {
+function Header({ title, subtitle, onMenuClick, mobileOpen, children }) {
   return <header className="topbar m-topbar">
-    <div className="title-block"><button type="button" className="mobile-menu-button" aria-controls="main-menu" onClick={onMenuClick}>Menu</button><h1>{title}</h1><p>{subtitle}</p></div>
+    <div className="title-block"><button type="button" className="mobile-menu-button" aria-controls="main-menu" aria-expanded={mobileOpen} onClick={onMenuClick}>Menu</button><h1>{title}</h1><p>{subtitle}</p></div>
     <div className="m-actions">{children}</div>
   </header>;
 }
@@ -94,7 +126,7 @@ const flavors = ["Tradicional", "Morango", "Cupuaçu", "Banana"];
 const srcOptions = ["Google Maps", "Instagram", "Indicação"];
 const stages = ["Contatado", "Negociando", "Convertido"];
 
-export default function Modules({ active, onMenuClick, onNavigate }) {
+export default function Modules({ active, onMenuClick, onNavigate, mobileOpen }) {
   const [stock, setStock] = useStored("secret-acai-stock-2026-v1", seedStock);
   const [clients, setClients] = useStored("secret-acai-clients-2026-v1", seedClients);
   const [leads, setLeads] = useStored("secret-acai-leads-2026-v1", seedLeads);
@@ -195,7 +227,7 @@ export default function Modules({ active, onMenuClick, onNavigate }) {
   const selectedLead = leads.find(l => l.id === activeLeadId);
   return <main className="main-content module-main" id="conteudo">
     {active === "Vendas" && <>
-      <Header title="Registrar venda" subtitle="Registre o pedido e atualize estoque e histórico automaticamente" onMenuClick={onMenuClick} />
+      <Header title="Registrar venda" subtitle="Registre o pedido e atualize estoque e histórico automaticamente" onMenuClick={onMenuClick} mobileOpen={mobileOpen} />
       <div className="m-sale-layout">
         <div className="m-sale-steps">
           <section className="panel m-section"><h2>1. Cliente</h2><div className="m-client-choose">
@@ -232,7 +264,7 @@ export default function Modules({ active, onMenuClick, onNavigate }) {
       {orders.length > 0 && <section className="panel m-recent-orders"><h2>Vendas registradas nesta demonstração</h2><Table headings={["Pedido", "Cliente", "Produto", "Caixas", "Valor"]}>{orders.map(o => <tr key={o.id}><td>#{o.id}</td><td>{o.client}</td><td>{o.product.replace("-", " · ")}</td><td>{o.quantity}</td><td>{currency(o.total)}</td></tr>)}</Table></section>}
     </>}
     {active === "Estoque" && <>
-      <Header title="Estoque" subtitle="Controle por tamanho e sabor, com entradas e baixas automáticas" onMenuClick={onMenuClick}>
+      <Header title="Estoque" subtitle="Controle por tamanho e sabor, com entradas e baixas automáticas" onMenuClick={onMenuClick} mobileOpen={mobileOpen}>
         <button type="button" className="m-outline-button" onClick={() => open("stockEntry")}>Registrar entrada</button>
         <button type="button" className="primary-button" onClick={() => open("stockAdjust")}>Ajustar estoque</button>
       </Header>
@@ -252,7 +284,7 @@ export default function Modules({ active, onMenuClick, onNavigate }) {
       <section className="panel m-movement-panel"><h2>Histórico de movimentações</h2><Table headings={["Data", "Tipo", "Produto", "Quantidade", "Origem / motivo"]}>{movements.map((m,i) => <tr key={i}><td>{m.when}</td><td><span className={"m-status m-status--" + (m.type === "Entrada" ? "ok" : "brand")}>{m.type}</span></td><td>{m.product}</td><td>{m.quantity}</td><td>{m.reason}</td></tr>)}</Table></section>
     </>}
     {active === "Clientes" && <>
-      <Header title="Clientes" subtitle="Histórico, recorrência e oportunidades de reativação" onMenuClick={onMenuClick}>
+      <Header title="Clientes" subtitle="Histórico, recorrência e oportunidades de reativação" onMenuClick={onMenuClick} mobileOpen={mobileOpen}>
         <button type="button" className="primary-button" onClick={() => open("clientNew")}>+ Novo cliente</button>
       </Header>
       <div className="m-metrics-three">
@@ -280,7 +312,7 @@ export default function Modules({ active, onMenuClick, onNavigate }) {
       </div>
     </>}
     {active === "Prospecção" && <>
-      <Header title="Prospecção" subtitle="Organize contatos, negociações e conversões em um único funil" onMenuClick={onMenuClick}>
+      <Header title="Prospecção" subtitle="Organize contatos, negociações e conversões em um único funil" onMenuClick={onMenuClick} mobileOpen={mobileOpen}>
         <button className="m-outline-button" type="button" onClick={()=>open("import")}>Importar lista</button>
         <button className="primary-button" type="button" onClick={()=>open("leadNew")}>+ Novo lead</button>
       </Header>
@@ -309,7 +341,7 @@ export default function Modules({ active, onMenuClick, onNavigate }) {
       })}</div>
     </>}
     {active === "Relatórios" && <>
-      <Header title="Relatórios" subtitle="Acompanhe desempenho semanal e mensal com comparação entre períodos" onMenuClick={onMenuClick}>
+      <Header title="Relatórios" subtitle="Acompanhe desempenho semanal e mensal com comparação entre períodos" onMenuClick={onMenuClick} mobileOpen={mobileOpen}>
         <button type="button" className="primary-button" onClick={()=>window.print()}>Exportar PDF</button>
       </Header>
       <div className="panel m-report-toolbar"><div className="m-segment">{["Semanal","Mensal"].map(m=><button key={m} type="button" aria-pressed={reportMode===m} className={reportMode===m?"selected":""} onClick={()=>setReportMode(m)}>{m}</button>)}</div>
@@ -338,7 +370,7 @@ export default function Modules({ active, onMenuClick, onNavigate }) {
       <div className="m-secondary-link"><button type="button" onClick={()=>open("diagnosis")}>Ver diagnóstico de desempenho do case →</button></div>
     </>}
     <footer className="m-demo-footer"><span>Protótipo interativo baseado no Figma Secret Açaí · Dados demonstrativos de agosto de 2026 · Alterações salvas somente neste navegador, não em um servidor.</span><button type="button" className="m-reset" onClick={() => { if (!window.confirm("Restaurar os dados originais do Figma? As alterações desta demonstração serão apagadas deste navegador.")) return; ["secret-acai-stock-2026-v1","secret-acai-clients-2026-v1","secret-acai-leads-2026-v1","secret-acai-moves-2026-v1","secret-acai-sales-2026-v1"].forEach(key => window.localStorage.removeItem(key)); window.location.reload(); }}>Restaurar dados do Figma</button></footer>
-    {modal && <Modal title={{
+    {modal && <Modal key={modal} title={{
       clientNew:"Novo cliente", stockEntry:"Registrar entrada", stockAdjust:"Ajustar estoque", leadNew:"Novo lead",
       followUp:"Follow-up",leadContact:"Contato comercial",saleConfirm:"Confirmar venda",saleSuccess:"Venda registrada",
       approval:"Autorização necessária", reactivation:"Reativar clientes",import:"Importar lista",diagnosis:"Diagnóstico de desempenho"
