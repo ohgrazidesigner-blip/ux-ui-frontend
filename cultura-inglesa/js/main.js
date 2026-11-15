@@ -41,10 +41,12 @@
   });
 
   function openWhatsApp() {
-    if (!mobileMenu.hidden) closeMobileMenu(false);
+    const fromMobileMenu = !mobileMenu.hidden;
     const openDialog = document.querySelector('.state-dialog[open]');
+    // Never try to restore focus to a control hidden by a closed menu/dialog.
+    waReturnFocus = fromMobileMenu || openDialog ? waButton : document.activeElement;
+    if (fromMobileMenu) closeMobileMenu(false);
     if (openDialog) openDialog.close();
-    waReturnFocus = document.activeElement;
     waPicker.hidden = false;
     waButton.setAttribute('aria-expanded', 'true');
     waPicker.querySelector('[data-unit]').focus();
@@ -59,6 +61,12 @@
 
   waButton.addEventListener('click', () => waPicker.hidden ? openWhatsApp() : closeWhatsApp());
   waClose.addEventListener('click', () => closeWhatsApp());
+  waPicker.addEventListener('focusout', event => {
+    // The selector is not a modal: dismiss it when keyboard focus leaves.
+    if (event.relatedTarget && !waPicker.contains(event.relatedTarget) && event.relatedTarget !== waButton) {
+      closeWhatsApp(false);
+    }
+  });
   document.querySelectorAll('[data-open-wa]').forEach(button => {
     button.addEventListener('click', openWhatsApp);
   });
@@ -95,7 +103,7 @@
       if (!mobileMenu.hidden) { closeMobileMenu(); return; }
     }
     if (event.key !== 'Tab') return;
-    const active = !mobileMenu.hidden ? mobileMenu : !waPicker.hidden ? waPicker : null;
+    const active = !mobileMenu.hidden ? mobileMenu : null;
     if (!active) return;
     const choices = focusable(active);
     if (!choices.length) return;
@@ -305,12 +313,7 @@ function initLocationsMap() {
       className: 'location-tooltip',
       interactive: false
     }).openTooltip();
-    marker.on('click', () => {
-      const card = document.getElementById('unidade-' + location.id);
-      if (!card) return;
-      document.querySelectorAll('.unidade.is-selected').forEach(node => node.classList.remove('is-selected'));
-      card.classList.add('is-selected');
-    });
+    marker.on('click', () => selectUnit(location.id));
     return marker;
   });
 
