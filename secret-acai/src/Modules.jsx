@@ -113,8 +113,8 @@ function Header({ title, subtitle, onMenuClick, mobileOpen, children }) {
 function Field({ label, children, required = false }) {
   return <label className="m-field"><span>{label}{required && " *"}</span>{children}</label>;
 }
-function Select({ value, onChange, choices, className = "" }) {
-  return <select className={"m-control " + className} value={value} onChange={(e) => onChange(e.target.value)}>
+function Select({ value, onChange, choices, className = "", ariaLabel }) {
+  return <select className={"m-control " + className} aria-label={ariaLabel} value={value} onChange={(e) => onChange(e.target.value)}>
     {choices.map((item) => typeof item === "string" ? <option key={item} value={item}>{item}</option> :
       <option key={item.value} value={item.value}>{item.label}</option>)}
   </select>;
@@ -274,9 +274,9 @@ export default function Modules({ active, onMenuClick, onNavigate, mobileOpen })
         <Metric label="Última movimentação" value={movements[0]?.when || "Hoje, 15:42"} helper={movements[0]?.type === "Entrada" ? "Entrada de " + movements[0].quantity : "Movimentação registrada"} tone="success" />
       </div>
       <div className="m-toolbar">
-        <Select value={sizeFilter} onChange={setSizeFilter} choices={["Todos", "10L", "5L"].map(v => ({value:v,label: "Tamanho · " + v}))} />
-        <Select value={flavorFilter} onChange={setFlavorFilter} choices={["Todos", ...flavors].map(v => ({value:v,label:"Sabor · " + v}))} />
-        <Select value={statusFilter} onChange={setStatusFilter} choices={["Todos", "Saudável", "Atenção", "Baixo"].map(v=>({value:v,label:"Status · " + v}))} />
+        <Select ariaLabel="Filtrar estoque por tamanho" value={sizeFilter} onChange={setSizeFilter} choices={["Todos", "10L", "5L"].map(v => ({value:v,label: "Tamanho · " + v}))} />
+        <Select ariaLabel="Filtrar estoque por sabor" value={flavorFilter} onChange={setFlavorFilter} choices={["Todos", ...flavors].map(v => ({value:v,label:"Sabor · " + v}))} />
+        <Select ariaLabel="Filtrar estoque por status" value={statusFilter} onChange={setStatusFilter} choices={["Todos", "Saudável", "Atenção", "Baixo"].map(v=>({value:v,label:"Status · " + v}))} />
         <span className="m-stock-warning">{stock.filter(p => statusFor(p.quantity) === "Baixo").length} variações precisam de reposição prioritária</span>
       </div>
       <section className="panel m-table-panel"><Table headings={["Produto", "Tamanho", "Sabor", "Saldo atual", "Preço tabela", "Status"]}>{stockRows.map(p =>
@@ -294,8 +294,8 @@ export default function Modules({ active, onMenuClick, onNavigate, mobileOpen })
       </div>
       <div className="m-toolbar">
         <input className="m-control m-search" placeholder="Buscar cliente, negócio ou telefone..." aria-label="Buscar clientes" value={query} onChange={e=>setQuery(e.target.value)} />
-        <Select value={clientDeliveryFilter} onChange={setClientDeliveryFilter} choices={["Todas","Uber","Retirada"].map(v=>({value:v,label:"Entrega · " + v}))} />
-        <Select value={statusFilter} onChange={setStatusFilter} choices={["Todos","Ativo","Atenção","Inativo"].map(v=>({value:v,label:"Status · " + v}))} />
+        <Select ariaLabel="Filtrar clientes por modalidade de entrega" value={clientDeliveryFilter} onChange={setClientDeliveryFilter} choices={["Todas","Uber","Retirada"].map(v=>({value:v,label:"Entrega · " + v}))} />
+        <Select ariaLabel="Filtrar clientes por status" value={statusFilter} onChange={setStatusFilter} choices={["Todos","Ativo","Atenção","Inativo"].map(v=>({value:v,label:"Status · " + v}))} />
         <span className="m-date-tag">Última compra · Todos</span>
       </div>
       <div className="m-clients-grid">
@@ -317,7 +317,7 @@ export default function Modules({ active, onMenuClick, onNavigate, mobileOpen })
         <button className="primary-button" type="button" onClick={()=>open("leadNew")}>+ Novo lead</button>
       </Header>
       <div className="m-toolbar"><input className="m-control m-search" placeholder="Buscar empresa, contato ou telefone..." aria-label="Buscar leads" value={query} onChange={e=>setQuery(e.target.value)} />
-        <Select value={originFilter} onChange={setOriginFilter} choices={["Todas", ...srcOptions].map(v=>({value:v,label:"Origem · " + v}))} />
+        <Select ariaLabel="Filtrar leads por origem" value={originFilter} onChange={setOriginFilter} choices={["Todas", ...srcOptions].map(v=>({value:v,label:"Origem · " + v}))} />
         <span className="m-date-tag">Responsável · Todos</span>
       </div>
       <div className="m-metrics-four">
