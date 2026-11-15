@@ -1,0 +1,66 @@
+name: Capture Showcase Screenshots
+
+# One-time screenshot capture in a dedicated feature branch. Browser-generated
+# assets are committed to the branch for human review before the Pages release.
+on:
+  push:
+    branches: [feat/front-end-showcase-2026-11-15]
+    paths:
+      - '.github/scripts/capture-showcase.cjs'
+      - '.github/workflows/capture-showcase.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  capture-original-projects:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout the feature branch
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - name: Use Node 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Build the existing React projects
+        run: |
+          npm --prefix secret-acai install --no-audit --no-fund
+          npm --prefix ledgerflow install --no-audit --no-fund
+          npm --prefix secret-acai run build
+          npm --prefix ledgerflow run build
+      - name: Install Chromium browser
+        run: |
+          npm install --no-save --no-package-lock --no-audit --no-fund playwright
+          npx playwright install --with-deps chromium
+      - name: Capture actual screenshots
+        shell: bash
+        run: |
+          python3 -m http.server 8765 --bind 127.0.0.1 --directory cultura-inglesa >/tmp/cultura-showcase.log 2>&1 &
+          p1=$!
+          npm --prefix secret-acai run preview -- --host 127.0.0.1 --port 8766 --strictPort >/tmp/secret-showcase.log 2>&1 &
+          p2=$!
+          npm --prefix ledgerflow run preview -- --host 127.0.0.1 --port 8767 --strictPort >/tmp/ledger-showcase.log 2>&1 &
+          p3=$!
+          trap 'kill "$p1" "$p2" "$p3" 2>/dev/null || true' EXIT
+          node .github/scripts/capture-showcase.cjs
+      - name: Commit real captured images to this review branch
+        shell: bash
+        run: |
+          git add showcase/assets/*.jpg showcase/assets/capture-provenance.json
+          if ! git diff --cached --quiet; then
+            git -c user.name='github-actions[bot]' -c user.email='41898282+github-actions[bot]@users.noreply.github.com' commit -m 'assets(showcase): capture original front-end desktops and mobiles'
+            git fetch origin feat/front-end-showcase-2026-11-15
+            git rebase origin/feat/front-end-showcase-2026-11-15
+            git push origin HEAD:feat/front-end-showcase-2026-11-15
+          fi
+      - name: Preserve captures as a separate artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: showcase-real-screenshots
+          path: showcase/assets/
+          if-no-files-found: ignore
+          retention-days: 14

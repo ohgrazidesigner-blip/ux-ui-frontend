@@ -1,0 +1,50 @@
+name: Validate Front-End Showcase
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'showcase/**'
+      - '.github/scripts/validate-showcase.cjs'
+      - '.github/workflows/validate-showcase.yml'
+      - '.github/workflows/deploy-secret-acai-pages.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  front-end-showcase:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Verify existing projects still build
+        run: |
+          npm --prefix secret-acai install --no-audit --no-fund
+          npm --prefix ledgerflow install --no-audit --no-fund
+          npm --prefix secret-acai run build
+          npm --prefix ledgerflow run build
+          node --check cultura-inglesa/js/main.js
+          node --check showcase/script.js
+      - name: Install Chromium and axe
+        run: |
+          npm install --no-save --no-package-lock --no-audit --no-fund playwright @axe-core/playwright
+          npx playwright install --with-deps chromium
+      - name: Audit portfolio images, layout, links and accessibility
+        shell: bash
+        run: |
+          python3 -m http.server 8770 --bind 127.0.0.1 --directory showcase >/tmp/showcase-preview.log 2>&1 &
+          server_pid=$!
+          trap 'kill "$server_pid" || true' EXIT
+          node .github/scripts/validate-showcase.cjs
+      - name: Upload actual portfolio screenshots and audit
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: showcase-browser-review
+          path: showcase-review-artifacts/
+          if-no-files-found: ignore
+          retention-days: 14

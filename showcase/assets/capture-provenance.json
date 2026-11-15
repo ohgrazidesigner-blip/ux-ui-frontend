@@ -1,0 +1,67 @@
+{
+  "type": "Real Playwright screenshots from source applications served locally",
+  "method": "Chromium, light theme, viewport only, no simulated mockups",
+  "sourceCommit": "b66a0621defdf29d223f9b1377298c54ad302596",
+  "capturedScreens": [
+    {
+      "label": "Cultura Inglesa Salvador",
+      "viewport": "desktop",
+      "width": 1440,
+      "height": 900,
+      "file": "cultura-inglesa-desktop.jpg",
+      "bytes": 103982,
+      "preview": "Ir para o conteúdo\n\nCultura Inglesa Salvador\n\nCursos\nExames Internacionais\nAluno\nUnidades\n",
+      "pageErrors": []
+    },
+    {
+      "label": "Cultura Inglesa Salvador",
+      "viewport": "mobile",
+      "width": 390,
+      "height": 844,
+      "file": "cultura-inglesa-mobile.jpg",
+      "bytes": 43628,
+      "preview": "Ir para o conteúdo\nFale Conosco\n☰\n\nINGLÊS QUE ABRE CAMINHOS\n\nFaz toda a diferença\nno currí",
+      "pageErrors": []
+    },
+    {
+      "label": "Secret Açaí",
+      "viewport": "desktop",
+      "width": 1440,
+      "height": 900,
+      "file": "secret-acai-desktop.jpg",
+      "bytes": 85176,
+      "preview": "Pular para o conteúdo\nSecret Açaí\nDashboard\nVendas\nEstoque\nClientes\nProspecção\nRelatórios\n",
+      "pageErrors": []
+    },
+    {
+      "label": "Secret Açaí",
+      "viewport": "mobile",
+      "width": 390,
+      "height": 844,
+      "file": "secret-acai-mobile.jpg",
+      "bytes": 35581,
+      "preview": "Pular para o conteúdo\nMenu\nDashboard\n\nVisão geral da operação e relacionamento com cliente",
+      "pageErrors": []
+    },
+    {
+      "label": "LedgerFlow",
+      "viewport": "desktop",
+      "width": 1440,
+      "height": 900,
+      "file": "ledgerflow-desktop.jpg",
+      "bytes": 103745,
+      "preview": "LedgerFlow\nVisão Geral\nEmpresas\nConciliação\nImportações\nFiscal\nRelatórios\nObrigações\nPendê",
+      "pageErrors": []
+    },
+    {
+      "label": "LedgerFlow",
+      "viewport": "mobile",
+      "width": 390,
+      "height": 844,
+      "file": "ledgerflow-mobile.jpg",
+      "bytes": 35871,
+      "preview": "JC\nAlfa Comércio · Salvador\nJul/2026\nVisão geral\n\nO que precisa da sua atenção agora.\n\n3\nR",
+      "pageErrors": []
+    }
+  ]
+}
