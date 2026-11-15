@@ -10,7 +10,7 @@
   --border: #e8e0ea;
   --muted: #716a75;
   --success: #2e7d57;
-  --warning: #b45d1d;
+  --warning: #a85f14;
 }
 * { box-sizing: border-box; }
 body { margin: 0; min-width: 320px; }
