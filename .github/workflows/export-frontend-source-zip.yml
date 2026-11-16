@@ -1,0 +1,38 @@
+name: Export full Front-End source ZIP
+
+on:
+  push:
+    branches:
+      - package/frontend-source-zip-2026-11-15
+    paths:
+      - .github/workflows/export-frontend-source-zip.yml
+
+permissions:
+  contents: read
+
+jobs:
+  export:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out complete source
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+
+      - name: Create source archive
+        run: |
+          set -euo pipefail
+          git archive --format=zip --prefix=portfolio-frontend/ --output=Portfolio_FrontEnd_Codigo_Fonte_Completo.zip HEAD
+          unzip -tq Portfolio_FrontEnd_Codigo_Fonte_Completo.zip
+          unzip -Z1 Portfolio_FrontEnd_Codigo_Fonte_Completo.zip | grep -q '^portfolio-frontend/cultura-inglesa/index.html$'
+          unzip -Z1 Portfolio_FrontEnd_Codigo_Fonte_Completo.zip | grep -q '^portfolio-frontend/secret-acai/src/App.jsx$'
+          unzip -Z1 Portfolio_FrontEnd_Codigo_Fonte_Completo.zip | grep -q '^portfolio-frontend/ledgerflow/src/App.jsx$'
+          unzip -Z1 Portfolio_FrontEnd_Codigo_Fonte_Completo.zip | grep -q '^portfolio-frontend/showcase/index.html$'
+          ls -lh Portfolio_FrontEnd_Codigo_Fonte_Completo.zip
+      - name: Upload source ZIP
+        uses: actions/upload-artifact@v4
+        with:
+          name: frontend-source-full
+          path: Portfolio_FrontEnd_Codigo_Fonte_Completo.zip
+          retention-days: 7
+          if-no-files-found: error
